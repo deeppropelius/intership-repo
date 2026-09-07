@@ -11,11 +11,17 @@ function Addtodo() {
         console.log("Error");
     }
     todolist.innerHTML = "";
-    todo.forEach((item) => {
+    todo.forEach((item, index) => {
         const li = document.createElement("li");
         li.textContent = item;
-        todolist.appendChild(li);
         const cancle = document.createElement("button");
+        cancle.textContent = "X";
+        cancle.onclick = () => {
+            todo.splice(index, 1);
+            li.remove();
+        };
+        li.appendChild(cancle);
+        todolist.appendChild(li);
     });
     input.value = "";
 }
