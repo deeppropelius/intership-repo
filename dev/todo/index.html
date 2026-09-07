@@ -4,20 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Todo</title>
-    <script src="script.js"></script>
-     <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <section class="Header">
-    <h1>On YourList</h1>
-    </section>
-    <section id="Stack">
-        
-
-    </section>
+    <header class="Header">
+        <h1>On YourList</h1>
+    </header>
+    <main id="Stack" class="items">
+    </main>
     <section class="input-bar">
         <div>
-            <input type="text" id="event" placeholder="Enter event">
+            <input type="text" id="event" placeholder="Enter event" aria-label="Enter event">
             <button id="AddEvent" onclick="Addtodo()">Add</button>
         </div>
     </section>

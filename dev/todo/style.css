@@ -1,12 +1,48 @@
+body{
+    text-align: center;
+    background: rgb(255, 255, 164);
+}
+h1{
+    color: chartreuse;
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
 .input-bar{
-    width: 100vmax;
+    width: 100%;
     position: fixed ;
     bottom: 0px;
     padding: 5px;
 }
+.input-bar div{
+    width: 100%;
+}
 .input-bar div input {
-    width: min-content;
-    border-radius: 5px;
+    width:90%;
+    
+    border-radius: 10px;
     border-color: aqua;
     padding: 5px;
+}
+.input-bar div button{
+    background: white;
+    border-radius: 10px;
+    min-height :30px;
+    border-color: aqua;
+}
+.items{
+    color:Green;
+}
+.items li {
+    border:2px solid greenyellow;
+    background: rgb(255, 255, 164);
+    border-radius:5px;
+    padding :3px;
+    display: flex;
+    justify-content : space-evenly
+}
+.items li button{
+    border: none;
+    background:none;
+    color:red;
+    font-weight: bold;
+
 }
