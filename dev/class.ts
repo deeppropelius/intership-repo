@@ -9,7 +9,7 @@ const person = new Person();
 try{
     console.log(person);
     console.log (person.name = "Jeeya");
-    person.age = 20
+    // person.age = 20
     console.log (person.age);
 }
 catch(error){
