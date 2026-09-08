@@ -10,6 +10,8 @@ function render(): void {
         const emptyDiv = document.createElement("div");
         emptyDiv.id = "Empty";
         emptyDiv.textContent = "Nothing to do...";
+        emptyDiv.className="message"
+        emptyDiv.style="text-size:50px;"
         todoList.appendChild(emptyDiv);
         return;
     }
