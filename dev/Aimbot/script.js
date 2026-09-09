@@ -1,91 +1,106 @@
 "use strict";
+let totalhits = 0;
+let total = 0;
+let isPlaying = false;
+let currentGameId = 0;
 function Game() {
-    console.log("Started");
-    score();
-    const GameArea = document.querySelector(".main ");
+    const GameArea = document.querySelector(".main");
     const target = document.querySelector(".Target");
+    target.style.backgroundColor = "red";
     target.style.display = "block";
-    const x = Math.random() * (GameArea.clientWidth - target.clientWidth);
-    const y = Math.random() * (GameArea.clientHeight - target.clientHeight);
+    const maxX = GameArea.clientWidth - target.clientWidth;
+    const maxY = GameArea.clientHeight - target.clientHeight;
+    const x = Math.max(0, Math.floor(Math.random() * maxX));
+    const y = Math.max(0, Math.floor(Math.random() * maxY));
     target.style.left = `${x}px`;
     target.style.top = `${y}px`;
-    console.log(x, y);
-    console.log("Target");
+    score();
 }
 async function counter() {
+    currentGameId++;
+    const thisGameId = currentGameId;
+    totalhits = 0;
+    total = 0;
+    isPlaying = false;
+    score();
     const coun = document.getElementById("CountDown");
-    const counter = ["3", "2", "1", "Go"];
+    const counterList = ["3", "2", "1", "Go"];
     const target = document.querySelector(".Target");
     target.style.display = "none";
-    for (const Count of counter) {
+    coun.style.display = "flex";
+    for (const Count of counterList) {
+        if (thisGameId !== currentGameId)
+            return;
         coun.textContent = Count;
         await wait(1000);
     }
+    if (thisGameId !== currentGameId)
+        return;
     const title = document.querySelector(".main h1");
-    const countdown = document.getElementById("CountDown");
-    title.style.display = "none";
-    countdown.style.display = "none";
+    if (title)
+        title.style.display = "none";
+    coun.style.display = "none";
+    isPlaying = true;
     let time = 30;
-    const timer = setInterval(() => {
-        time--;
-        if (time == 0) {
-            clearInterval(timer);
-        }
-    }, 1000);
+    const tim = document.querySelector(".Timer");
+    Game();
+    // Timer loop
     while (time > 0) {
-        const tim = document.querySelector(".Timer");
+        if (thisGameId !== currentGameId)
+            return;
         tim.textContent = `Time: ${time}`;
-        Game();
         time--;
-        await wait(2000);
-        total += 1;
+        await wait(1000);
     }
-    // Game is finished
+    if (thisGameId !== currentGameId)
+        return;
+    // Game Finished
+    isPlaying = false;
+    tim.textContent = `Time: 0`;
     target.style.display = "none";
-    target.style.backgroundColor = "red";
-    countdown.textContent = "Game Over";
-    countdown.style.display = "block";
+    coun.textContent = "Game Over";
+    coun.style.display = "block";
 }
 function Start() {
-    console.log("Game Started");
-    const target = document.querySelector(".Target");
     counter();
 }
 function wait(ms) {
-    return new Promise((resolve) => {
-        setTimeout(resolve, ms);
-    });
+    return new Promise((resolve) => setTimeout(resolve, ms));
 }
-//div id=Score
-let totalhits = 0;
-let total = 0;
-let accuracy = (totalhits / total) * 100;
 function score() {
-    console.log("Score is called");
     const Sc = document.getElementById("Score");
     Sc.innerHTML = "";
+    const accuracy = total > 0 ? Math.round((totalhits / total) * 100) : 0;
     const Scor = document.createElement("div");
     const accu = document.createElement("div");
     const restart = document.createElement("div");
     restart.textContent = `Restart`;
-    Scor.textContent = `Score :${totalhits}/${total}`;
-    accu.textContent = `Accuaracy:${accuracy} %`;
+    restart.style.cursor = "pointer";
+    Scor.textContent = `Score: ${totalhits}/${total}`;
+    accu.textContent = `Accuracy: ${accuracy}%`;
     Sc.appendChild(Scor);
     Sc.appendChild(restart);
     Sc.appendChild(accu);
-    restart.onclick = counter;
+    restart.onclick = () => counter();
 }
-function AddScore() {
+async function AddScore(e) {
+    if (!isPlaying)
+        return;
+    if (e)
+        e.stopPropagation(); // Prevent clicking target from triggering miss on main area
     const target = document.querySelector(".Target");
     target.style.backgroundColor = "green";
     totalhits++;
     total++;
-    Game();
+    score();
+    await wait(120); // Quick green flash
+    if (isPlaying) {
+        Game();
+    }
 }
-//fix this please
-// New target always starts red
-// Target turns green when hit
-// Target moves after every hit
-// Accuracy updates correctly
-// Restart button
-// No duplicate timers/countdowns
+function MissClick() {
+    if (!isPlaying)
+        return;
+    total++;
+    score();
+}
