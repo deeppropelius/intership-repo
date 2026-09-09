@@ -7,7 +7,7 @@ function Game(): void {
     const GameArea = document.querySelector(".main") as HTMLDivElement;
     const target = document.querySelector(".Target") as HTMLDivElement;
 
-    target.style.backgroundColor = "red";
+target.style.background = "radial-gradient(circle, #ff6b6b 0%, #ef4444 35%, #b91c1c 65%, #450a0a 100%)";
     target.style.display = "block";
 
     const maxX = GameArea.clientWidth - target.clientWidth;
@@ -71,7 +71,7 @@ async function counter(): Promise<void> {
     tim.textContent = `Time: 0`;
     target.style.display = "none";
 
-    coun.textContent = "Game Over";
+    coun.textContent = `Your Score: ${totalhits}/${total}`;
     coun.style.display = "block";
 }
 

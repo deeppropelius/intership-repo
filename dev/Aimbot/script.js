@@ -6,7 +6,7 @@ let currentGameId = 0;
 function Game() {
     const GameArea = document.querySelector(".main");
     const target = document.querySelector(".Target");
-    target.style.backgroundColor = "red";
+    target.style.background = "radial-gradient(circle, #ff6b6b 0%, #ef4444 35%, #b91c1c 65%, #450a0a 100%)";
     target.style.display = "block";
     const maxX = GameArea.clientWidth - target.clientWidth;
     const maxY = GameArea.clientHeight - target.clientHeight;
@@ -58,7 +58,7 @@ async function counter() {
     isPlaying = false;
     tim.textContent = `Time: 0`;
     target.style.display = "none";
-    coun.textContent = "Game Over";
+    coun.textContent = `Your Score: ${totalhits}/${total}`;
     coun.style.display = "block";
 }
 function Start() {
