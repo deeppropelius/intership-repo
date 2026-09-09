@@ -4,7 +4,7 @@ function Game(): any {
     score();
     const GameArea = document.querySelector(".main ") as HTMLDivElement;
     const target = document.querySelector(".Target") as HTMLDivElement;
-    target.style.display="block"
+    target.style.display = "block"
 
     const x = Math.random() * (GameArea.clientWidth - target.clientWidth);
     const y = Math.random() * (GameArea.clientHeight - target.clientHeight);
@@ -35,8 +35,14 @@ async function counter(): Promise<void> {
     title.style.display = "none";
     countdown.style.display = "none";
 
-    let time: number = 3;
+    let time: number = 30;
 
+    const timer: number = setInterval(() => {
+        time--;
+        if (time == 0) {
+            clearInterval(timer);
+        }
+    }, 1000);
     while (time > 0) {
         const tim = document.querySelector(".Timer") as HTMLDivElement;
 
@@ -46,11 +52,13 @@ async function counter(): Promise<void> {
 
         time--;
 
-        await wait(1000);
+        await wait(2000);
+        total += 1;
     }
 
     // Game is finished
     target.style.display = "none";
+    target.style.backgroundColor = "red";
 
     countdown.textContent = "Game Over";
     countdown.style.display = "block";
@@ -61,7 +69,7 @@ async function counter(): Promise<void> {
 function Start(): any {
     console.log("Game Started");
     const target = document.querySelector(".Target") as HTMLDivElement;
-    
+
 
     counter();
 
@@ -72,21 +80,43 @@ function wait(ms: number): Promise<void> {
     });
 }
 //div id=Score
-
+let totalhits: number = 0;
+let total: number = 0;
+let accuracy: number = (totalhits / total) * 100;
 function score(): void {
-    
+
     console.log("Score is called");
-    const totalhits: number = 1;
-    const total: number = 1;
-    const accuracy: number = (totalhits / total) * 100;
-    const Sc = document.getElementById("Score") as HTMLDivElement
+
+    const Sc = document.getElementById("Score") as HTMLDivElement;
     Sc.innerHTML = "";
     const Scor = document.createElement("div");
     const accu = document.createElement("div");
+    const restart = document.createElement("div");
 
+    restart.textContent = `Restart`;
     Scor.textContent = `Score :${totalhits}/${total}`;
     accu.textContent = `Accuaracy:${accuracy} %`;
     Sc.appendChild(Scor);
+    Sc.appendChild(restart);
     Sc.appendChild(accu);
+    restart.onclick = counter;
 
 }
+function AddScore(): void {
+    const target = document.querySelector(".Target") as HTMLDivElement;
+    target.style.backgroundColor = "green";
+
+    totalhits++;
+    total++;
+    Game();
+
+}
+
+
+//fix this please
+// New target always starts red
+// Target turns green when hit
+// Target moves after every hit
+// Accuracy updates correctly
+// Restart button
+// No duplicate timers/countdowns

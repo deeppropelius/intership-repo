@@ -1,48 +1,53 @@
-body{
-    background-color:rgb(35, 37, 39) ;
+body {
+    background-color: rgb(35, 37, 39);
     padding: 5px;
 }
-.timer{
+
+.timer {
     color: white;
 
 }
-.main{
+
+.main {
 
     margin: 5px;
     height: 90vh;
     width: 100vW;
     color: white;
-   border: 2px white solid;
-   position: relative;
+    border: 2px white solid;
+    position: relative;
 }
-#Start
-{
+
+#Start {
     min-height: max-content;
     border-radius: 50%;
     background-color: black;
     color: white;
     align-items: center;
 }
-.Start{
+
+.Start {
     text-align: center;
 }
+
 .target {
-  position: absolute;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background: red;
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: red;
 }
+
 #CountDown {
     font-size: 100px;
     color: red;
     text-align: center;
-    
+
     display: flex;
     justify-content: center;
 }
 
-.Score{
+.Score {
     display: flex;
     justify-content: space-around;
     bottom: 3px;
@@ -57,10 +62,12 @@ body{
     border-radius: 50%;
     display: none;
 }
+
 .Target p {
     text-align: center;
     font-weight: 900;
 }
-.Timer{
-    color:white;
+
+.Timer {
+    color: white;
 }
