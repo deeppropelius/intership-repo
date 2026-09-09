@@ -112,8 +112,6 @@ function AddScore(): void {
 
 }
 
-
-//fix this please
 // New target always starts red
 // Target turns green when hit
 // Target moves after every hit
