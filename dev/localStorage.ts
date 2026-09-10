@@ -15,7 +15,7 @@ const Data = localStorage.getItem("Deep");
 if(Data){
 const User: any = JSON.parse(Data);
 const displayname = document.querySelector(".myname") as HTMLDivElement;
-displayname.textContent=User ;
+displayname.textContent=`User:${User.name} \n Surnmae :${User.suranme} \n  `;
 displayname.style.display="block";
 }
 
