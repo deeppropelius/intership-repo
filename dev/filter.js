@@ -27,3 +27,8 @@ const all = objects.every(function (ele) {
     return ele.intern === true;
 });
 console.log("every one is intern :", all);
+console.log("Using the Some");
+const Som = objects.some(function (so) {
+    return so.intern === true;
+});
+console.log("Is some one intern :", Som);
