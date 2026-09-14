@@ -22,3 +22,8 @@ const finds = objects.find(function (fi) {
     return fi.name === "something";
 });
 console.log(finds);
+console.log("Using Using every:");
+const all = objects.every(function (ele) {
+    return ele.intern === true;
+});
+console.log("every one is intern :", all);
