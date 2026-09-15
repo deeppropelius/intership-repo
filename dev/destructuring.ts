@@ -13,3 +13,7 @@ function printUser({name,age , location , intern }){
 }
 
 console.log(printUser(User));
+const message =()=> {
+    return "Using arrow Functions ...";
+}
+console.log(message());
