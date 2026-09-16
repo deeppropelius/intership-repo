@@ -1,0 +1,110 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #222;
+}
+
+.outer {
+    position: relative;
+
+    width: 90vw;
+    height: 90vh;
+
+    border: 2px solid black;
+    background: white;
+}
+
+/* Four corners */
+
+.corner {
+    position: absolute;
+
+    width: 15vw;
+    height: 15vh;
+
+    border: 3px solid black;
+    background: #f5f5f5;
+}
+
+#tl {
+    top: 0;
+    left: 0;
+}
+
+#tr {
+    top: 0;
+    right: 0;
+}
+
+#br {
+    right: 0;
+    bottom: 0;
+}
+
+#bl {
+    left: 0;
+    bottom: 0;
+}
+
+
+.middle-top {
+    position: absolute;
+    top: 0;
+    left: 15vw;
+    right: 15vw;
+    display: flex;
+    height: 150px;
+}
+.middle-left{
+    position: absolute;
+display: flex;
+flex-direction: column;
+top: 15vh;
+bottom: 15vh;
+}
+.middle-right{
+    position: absolute;
+display: flex;
+flex-direction: column;
+top: 15vh;
+bottom: 15vh;
+right: 0;
+}
+.middle-bottom{
+    position: absolute;
+display: flex;
+flex-direction: row;
+left: 15vw;
+bottom: 0;
+right: 15vw;
+}
+
+.minimt {
+    width: 10vw;
+    height: 15vh;
+    border: 2px solid black;
+    background: white;
+}
+.miniml{
+        border: 2px solid black;
+    width: 15vw;
+    height: 10vh
+}
+
+.minimr{
+        border: 2px solid black;
+    width: 15vw;
+    height: 10vh
+}
+.minimb{
+        border: 2px solid black;
+    width: 10vw;
+    height: 15vh
+}
