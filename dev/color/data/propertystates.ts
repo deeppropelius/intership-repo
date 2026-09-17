@@ -1,10 +1,4 @@
-import { PropertyState } from "../types";
-import { Player } from "../types";
+import { Player, BoardSpace } from "../types.js";
 
-export let propertyrecords: PropertyState[]=[
-
-]
-export let users: Player[]=[
-
-]
-
+export let propertyrecords: BoardSpace[] = [];
+export let users: Player[] = [];
