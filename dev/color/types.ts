@@ -8,7 +8,7 @@ export interface BoardSpace {
     group?: ColorGroup;
     name: string;
     subtitle?: string;
-    image?: string;
+    image: string;
     buyingPrice?: number;
     sellingPrice?: number;
     houseUpgrade?: number;
@@ -37,6 +37,7 @@ export interface Player {
     inJail: boolean;
     jailTurns: number;
     properties: (number | string)[];
+    isBankrupt?: boolean;
 }
 
 export interface TaskCard {
@@ -47,4 +48,14 @@ export interface TaskCard {
     actionType: 'money' | 'move' | 'jail' | 'reward';
     value: number; // positive = gain, negative = pay, or space target
     image?: string;
+}
+
+export interface GameRules {
+    startingMoney: number;
+    startReward: number;
+    diceCount: number;
+    maxPlayers: number;
+    allowPropertySelling: boolean;
+    completeGroupBonus: boolean;
+    bankruptcyEnabled: boolean;
 }

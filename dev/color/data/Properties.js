@@ -1,4 +1,14 @@
-// 20 Colored State Properties (4 groups x 5 properties)
+// Configurable Game Rules (as defined in rule.md)
+export const gameConfig = {
+    startingMoney: 15000,
+    startReward: 2000,
+    diceCount: 2,
+    maxPlayers: 4,
+    allowPropertySelling: true,
+    completeGroupBonus: true,
+    bankruptcyEnabled: true
+};
+// 20 Colored State Properties with authentic image paths
 export const coloredProperties = [
     // RED GROUP
     {
@@ -8,11 +18,11 @@ export const coloredProperties = [
         name: "Darjeeling",
         image: "./assets/Darjeeling.jpg",
         buyingPrice: 500,
-        sellingPrice: 400,
+        sellingPrice: 375,
         houseUpgrade: 250,
         hotelUpgrade: 500,
         rent: { base: 50, house1: 100, house2: 150, house3: 200, hotel: 300 },
-        description: "Queen of the Hills, famed for aromatic tea gardens and Himalayan toy train views.",
+        description: "Queen of the Hills, aromatic world-famous tea gardens and Himalayan railway.",
         ownerId: null,
         houses: 0,
         hasHotel: false,
@@ -29,7 +39,7 @@ export const coloredProperties = [
         houseUpgrade: 350,
         hotelUpgrade: 700,
         rent: { base: 70, house1: 140, house2: 210, house3: 280, hotel: 420 },
-        description: "Spiritual heart of Punjab, home to the glorious Golden Temple and rich culinary heritage.",
+        description: "Spiritual sanctuary of Punjab, home to the resplendent Golden Temple.",
         ownerId: null,
         houses: 0,
         hasHotel: false,
@@ -46,7 +56,7 @@ export const coloredProperties = [
         houseUpgrade: 450,
         hotelUpgrade: 900,
         rent: { base: 90, house1: 180, house2: 270, house3: 360, hotel: 540 },
-        description: "Charming colonial hill station surrounded by pine forests and snow-capped peaks.",
+        description: "Picturesque Himalayan capital with pine forests and Mall Road promenade.",
         ownerId: null,
         houses: 0,
         hasHotel: false,
@@ -63,7 +73,7 @@ export const coloredProperties = [
         houseUpgrade: 550,
         hotelUpgrade: 1100,
         rent: { base: 110, house1: 220, house2: 330, house3: 440, hotel: 660 },
-        description: "City of Palaces, royal heritage, silk weaving, and sandalwood fragrance.",
+        description: "Royal city of grand illuminated palaces, sandalwood heritage, and silk.",
         ownerId: null,
         houses: 0,
         hasHotel: false,
@@ -80,7 +90,7 @@ export const coloredProperties = [
         houseUpgrade: 650,
         hotelUpgrade: 1300,
         rent: { base: 130, house1: 260, house2: 390, house3: 520, hotel: 780 },
-        description: "The magnificent Pink City with historic forts, grand courtyards, and vibrant bazaars.",
+        description: "The magnificent Pink City with iconic Hawa Mahal and Amber Fort.",
         ownerId: null,
         houses: 0,
         hasHotel: false,
@@ -98,7 +108,7 @@ export const coloredProperties = [
         houseUpgrade: 750,
         hotelUpgrade: 1500,
         rent: { base: 150, house1: 300, house2: 450, house3: 600, hotel: 900 },
-        description: "Home of the world wonder Taj Mahal and imperial Mughal architectural marvels.",
+        description: "Historic city housing the marble wonder of the world — the Taj Mahal.",
         ownerId: null,
         houses: 0,
         hasHotel: false,
@@ -115,7 +125,7 @@ export const coloredProperties = [
         houseUpgrade: 900,
         hotelUpgrade: 1800,
         rent: { base: 180, house1: 360, house2: 540, house3: 720, hotel: 1080 },
-        description: "One of the world's oldest living cities on the sacred banks of River Ganga.",
+        description: "One of the oldest living cities with illuminated Ganga Aarti ghats.",
         ownerId: null,
         houses: 0,
         hasHotel: false,
@@ -132,7 +142,7 @@ export const coloredProperties = [
         houseUpgrade: 1050,
         hotelUpgrade: 2100,
         rent: { base: 210, house1: 420, house2: 630, house3: 840, hotel: 1260 },
-        description: "Cultural capital of Tamil Nadu, famous for the towering Meenakshi Amman Temple.",
+        description: "Lotus city celebrated for towering gopurams of Meenakshi Temple.",
         ownerId: null,
         houses: 0,
         hasHotel: false,
@@ -149,7 +159,7 @@ export const coloredProperties = [
         houseUpgrade: 1200,
         hotelUpgrade: 2400,
         rent: { base: 240, house1: 480, house2: 720, house3: 960, hotel: 1440 },
-        description: "Coastal treasure featuring the awe-inspiring 13th-century Sun Temple chariot.",
+        description: "UNESCO Sun Temple monument sculpted as a giant stone chariot of the Sun.",
         ownerId: null,
         houses: 0,
         hasHotel: false,
@@ -166,7 +176,7 @@ export const coloredProperties = [
         houseUpgrade: 1350,
         hotelUpgrade: 2700,
         rent: { base: 270, house1: 540, house2: 810, house3: 1080, hotel: 1620 },
-        description: "City of Joy, known for literature, sweets, colonial landmarks, and Howrah Bridge.",
+        description: "City of Joy with grand Howrah Bridge, colonial arts, and sweets.",
         ownerId: null,
         houses: 0,
         hasHotel: false,
@@ -184,7 +194,7 @@ export const coloredProperties = [
         houseUpgrade: 1500,
         hotelUpgrade: 3000,
         rent: { base: 300, house1: 600, house2: 900, house3: 1200, hotel: 1800 },
-        description: "Paradise on Earth with tranquil Dal Lake houseboats and Mughal gardens.",
+        description: "Heaven on earth with shikara boats gliding across serene Dal Lake.",
         ownerId: null,
         houses: 0,
         hasHotel: false,
@@ -201,7 +211,7 @@ export const coloredProperties = [
         houseUpgrade: 1650,
         hotelUpgrade: 3300,
         rent: { base: 330, house1: 660, house2: 990, house3: 1320, hotel: 1980 },
-        description: "Scenic Himalayan capital blessed with views of Mt. Kangchenjunga and monasteries.",
+        description: "Himalayan gem framed by Mt. Kanchenjunga and monasteries.",
         ownerId: null,
         houses: 0,
         hasHotel: false,
@@ -218,7 +228,7 @@ export const coloredProperties = [
         houseUpgrade: 1800,
         hotelUpgrade: 3600,
         rent: { base: 360, house1: 720, house2: 1080, house3: 1440, hotel: 2160 },
-        description: "First UNESCO World Heritage City in India, textile hub and Gandhi Ashram landmark.",
+        description: "UNESCO World Heritage city, textile hub, and historic Sabarmati Ashram.",
         ownerId: null,
         houses: 0,
         hasHotel: false,
@@ -235,7 +245,7 @@ export const coloredProperties = [
         houseUpgrade: 2000,
         hotelUpgrade: 4000,
         rent: { base: 400, house1: 800, house2: 1200, house3: 1600, hotel: 2400 },
-        description: "Financial capital of India, city of dreams, Bollywood, and Marine Drive.",
+        description: "Financial capital and City of Dreams, Marine Drive, and Gateway of India.",
         ownerId: null,
         houses: 0,
         hasHotel: false,
@@ -252,7 +262,7 @@ export const coloredProperties = [
         houseUpgrade: 2250,
         hotelUpgrade: 4500,
         rent: { base: 450, house1: 900, house2: 1350, house3: 1800, hotel: 2700 },
-        description: "Sun-kissed beaches, vibrant nightlife, Portuguese heritage, and coastal serenity.",
+        description: "Sun-drenched coastal paradise, sandy beaches, and vibrant resorts.",
         ownerId: null,
         houses: 0,
         hasHotel: false,
@@ -270,7 +280,7 @@ export const coloredProperties = [
         houseUpgrade: 2500,
         hotelUpgrade: 5000,
         rent: { base: 500, house1: 1000, house2: 1500, house3: 2000, hotel: 3000 },
-        description: "Monumental ruins of the Vijayanagara Empire with stone chariots and boulder hills.",
+        description: "Monumental stone chariot ruins of the Vijayanagara Empire.",
         ownerId: null,
         houses: 0,
         hasHotel: false,
@@ -287,7 +297,7 @@ export const coloredProperties = [
         houseUpgrade: 3000,
         hotelUpgrade: 6000,
         rent: { base: 600, house1: 1200, house2: 1800, house3: 2400, hotel: 3600 },
-        description: "Gateway to South India, bustling metropolis with Marina Beach and Carnatic music.",
+        description: "Southern cultural metropolis boasting Marina Beach and classical music.",
         ownerId: null,
         houses: 0,
         hasHotel: false,
@@ -304,7 +314,7 @@ export const coloredProperties = [
         houseUpgrade: 3500,
         hotelUpgrade: 7000,
         rent: { base: 700, house1: 1400, house2: 2100, house3: 2800, hotel: 4200 },
-        description: "City of Pearls & Cyberabad, iconic Charminar, Golconda Fort, and world-class IT.",
+        description: "City of Pearls and Cyber Towers, Charminar, and Golconda Fort.",
         ownerId: null,
         houses: 0,
         hasHotel: false,
@@ -321,7 +331,7 @@ export const coloredProperties = [
         houseUpgrade: 4250,
         hotelUpgrade: 8500,
         rent: { base: 850, house1: 1700, house2: 2550, house3: 3400, hotel: 5100 },
-        description: "National capital territory rich in historic monuments, power corridors, and culture.",
+        description: "National Capital Territory rich with Red Fort, India Gate, and commerce.",
         ownerId: null,
         houses: 0,
         hasHotel: false,
@@ -338,14 +348,14 @@ export const coloredProperties = [
         houseUpgrade: 5000,
         hotelUpgrade: 10000,
         rent: { base: 1000, house1: 2000, house2: 3000, house3: 4000, hotel: 6000 },
-        description: "God's Own Country, lush backwaters, palm groves, spice plantations, and Ayurveda.",
+        description: "God's Own Country, lush backwaters, emerald palms, and Ayurveda.",
         ownerId: null,
         houses: 0,
         hasHotel: false,
         mortgaged: false
     }
 ];
-// 6 White / Transport / Utility Properties
+// 6 White / Transport / Utility Properties with images
 export const whiteProperties = [
     {
         id: "w1",
@@ -356,7 +366,7 @@ export const whiteProperties = [
         buyingPrice: 2000,
         sellingPrice: 1500,
         rent: { base: 200, house1: 400, house2: 800, house3: 1200, hotel: 1600 },
-        description: "Lifeline of the nation, connecting thousands of stations across India.",
+        description: "Lifeline of the nation, connecting millions across thousands of stations.",
         ownerId: null,
         houses: 0,
         hasHotel: false,
@@ -371,7 +381,7 @@ export const whiteProperties = [
         buyingPrice: 2500,
         sellingPrice: 1875,
         rent: { base: 250, house1: 500, house2: 1000, house3: 1500, hotel: 2000 },
-        description: "Flagship international airline connecting Indian cities to world hubs.",
+        description: "Flagship global aviation network linking Indian cities to world hubs.",
         ownerId: null,
         houses: 0,
         hasHotel: false,
@@ -386,7 +396,7 @@ export const whiteProperties = [
         buyingPrice: 2000,
         sellingPrice: 1500,
         rent: { base: 200, house1: 400, house2: 800, house3: 1200, hotel: 1600 },
-        description: "Modern rapid mass transit network powering urban mobility.",
+        description: "High-speed urban mass rapid transit network powering modern cities.",
         ownerId: null,
         houses: 0,
         hasHotel: false,
@@ -431,7 +441,7 @@ export const whiteProperties = [
         buyingPrice: 2200,
         sellingPrice: 1650,
         rent: { base: 220, house1: 440, house2: 880, house3: 1320, hotel: 1800 },
-        description: "Maritime trade network linking major ports and international maritime routes.",
+        description: "Maritime trade network linking major commercial ports and sea routes.",
         ownerId: null,
         houses: 0,
         hasHotel: false,
@@ -445,6 +455,7 @@ export const cornerSpaces = {
         type: "corner",
         group: "special",
         name: "START",
+        image: "./assets/darjeeling.jpg",
         subtitle: "Collect ₹2,000",
         description: "Collect ₹2,000 salary whenever you land on or pass Start!"
     },
@@ -453,14 +464,16 @@ export const cornerSpaces = {
         type: "corner",
         group: "special",
         name: "RESTHOUSE",
+        image: "./assets/goa.jpg",
         subtitle: "Free Resort & Rest",
-        description: "Relax at the luxury resthouse. No rent, just serene peace."
+        description: "Relax at the luxury resthouse. No rent, peaceful stop."
     },
     club: {
         id: "corner-club",
         type: "corner",
         group: "special",
         name: "CLUB",
+        image: "./assets/mumbai.jpg",
         subtitle: "VIP Networking",
         description: "Welcome to the exclusive Business Club. Enjoy high-stakes interactions!"
     },
@@ -469,6 +482,7 @@ export const cornerSpaces = {
         type: "corner",
         group: "special",
         name: "JAIL",
+        image: "./assets/delhi.jpg",
         subtitle: "Just Visiting",
         description: "Don't break the trade laws! If sent here, pay fine or wait turns."
     }
@@ -481,7 +495,8 @@ export const chanceTasks = [
         title: "Lucky Investment Return",
         description: "Your tech startup stock surged in the market! Collect ₹1,500 from the bank.",
         actionType: "money",
-        value: 1500
+        value: 1500,
+        image: "./assets/chance.jpg"
     },
     {
         id: "ch-2",
@@ -489,7 +504,8 @@ export const chanceTasks = [
         title: "Speeding Ticket on Highway",
         description: "Caught overspeeding on the expressway. Pay ₹500 fine to the bank.",
         actionType: "money",
-        value: -500
+        value: -500,
+        image: "./assets/chance.jpg"
     },
     {
         id: "ch-3",
@@ -497,7 +513,8 @@ export const chanceTasks = [
         title: "Advance to START",
         description: "Express helicopter ride to START! Collect ₹2,000 bonus salary immediately.",
         actionType: "move",
-        value: 0
+        value: 0,
+        image: "./assets/chance.jpg"
     },
     {
         id: "ch-4",
@@ -505,7 +522,8 @@ export const chanceTasks = [
         title: "Tourism Promotion Award",
         description: "Your state development project won a national tourism award! Collect ₹1,000.",
         actionType: "money",
-        value: 1000
+        value: 1000,
+        image: "./assets/chance.jpg"
     },
     {
         id: "ch-5",
@@ -513,7 +531,8 @@ export const chanceTasks = [
         title: "Luxury Tax Audit",
         description: "Tax audit discovered luxury property renovation expenses. Pay ₹800.",
         actionType: "money",
-        value: -800
+        value: -800,
+        image: "./assets/chance.jpg"
     }
 ];
 export const communityTasks = [
@@ -523,7 +542,8 @@ export const communityTasks = [
         title: "Festival Celebration Sponsor",
         description: "Sponsored the grand local cultural festival. Pay ₹400 for city fireworks.",
         actionType: "money",
-        value: -400
+        value: -400,
+        image: "./assets/community.jpg"
     },
     {
         id: "com-2",
@@ -531,7 +551,8 @@ export const communityTasks = [
         title: "Heritage Restoration Grant",
         description: "Received a state heritage conservation bonus grant! Collect ₹1,200.",
         actionType: "money",
-        value: 1200
+        value: 1200,
+        image: "./assets/community.jpg"
     },
     {
         id: "com-3",
@@ -539,7 +560,8 @@ export const communityTasks = [
         title: "Bank Dividend Payout",
         description: "Annual bank stock dividend credited to your account. Collect ₹800.",
         actionType: "money",
-        value: 800
+        value: 800,
+        image: "./assets/community.jpg"
     },
     {
         id: "com-4",
@@ -547,7 +569,8 @@ export const communityTasks = [
         title: "City Road Repair Contribution",
         description: "Contribute to building eco-friendly green roads. Pay ₹600.",
         actionType: "money",
-        value: -600
+        value: -600,
+        image: "./assets/community.jpg"
     },
     {
         id: "com-5",
@@ -555,18 +578,17 @@ export const communityTasks = [
         title: "Charity Gala Raffle",
         description: "You won 1st prize in the annual city charity gala! Collect ₹1,000.",
         actionType: "money",
-        value: 1000
+        value: 1000,
+        image: "./assets/community.jpg"
     }
 ];
 // Helper to build the standard 36-space board
 export function createBoardSpaces(randomizeProperties = false) {
     const board = new Array(36);
-    // 4 corners: Space 0 (BL), Space 9 (TL), Space 18 (TR), Space 27 (BR)
     board[0] = { ...cornerSpaces.start, spaceIndex: 0 };
     board[9] = { ...cornerSpaces.resthouse, spaceIndex: 9 };
     board[18] = { ...cornerSpaces.club, spaceIndex: 18 };
     board[27] = { ...cornerSpaces.jail, spaceIndex: 27 };
-    // 32 middle spaces: 20 colored + 6 white + 3 chance + 3 community
     let middlePool = [
         ...coloredProperties,
         ...whiteProperties,
@@ -575,8 +597,8 @@ export function createBoardSpaces(randomizeProperties = false) {
             type: "chance",
             group: "special",
             name: "CHANCE",
-            subtitle: "Try Your Luck",
             image: "./assets/chance.jpg",
+            subtitle: "Try Your Luck",
             description: "Draw a lucky Chance card from the center deck!"
         },
         {
@@ -584,8 +606,8 @@ export function createBoardSpaces(randomizeProperties = false) {
             type: "chance",
             group: "special",
             name: "CHANCE",
-            subtitle: "Try Your Luck",
             image: "./assets/chance.jpg",
+            subtitle: "Try Your Luck",
             description: "Draw a lucky Chance card from the center deck!"
         },
         {
@@ -593,8 +615,8 @@ export function createBoardSpaces(randomizeProperties = false) {
             type: "chance",
             group: "special",
             name: "CHANCE",
-            subtitle: "Try Your Luck",
             image: "./assets/chance.jpg",
+            subtitle: "Try Your Luck",
             description: "Draw a lucky Chance card from the center deck!"
         },
         {
@@ -602,8 +624,8 @@ export function createBoardSpaces(randomizeProperties = false) {
             type: "community",
             group: "special",
             name: "COMMUNITY",
-            subtitle: "Chest & Perks",
             image: "./assets/community.jpg",
+            subtitle: "Chest & Perks",
             description: "Draw a Community chest task card!"
         },
         {
@@ -611,8 +633,8 @@ export function createBoardSpaces(randomizeProperties = false) {
             type: "community",
             group: "special",
             name: "COMMUNITY",
-            subtitle: "Chest & Perks",
             image: "./assets/community.jpg",
+            subtitle: "Chest & Perks",
             description: "Draw a Community chest task card!"
         },
         {
@@ -620,19 +642,17 @@ export function createBoardSpaces(randomizeProperties = false) {
             type: "community",
             group: "special",
             name: "COMMUNITY",
-            subtitle: "Chest & Perks",
             image: "./assets/community.jpg",
+            subtitle: "Chest & Perks",
             description: "Draw a Community chest task card!"
         }
     ];
     if (randomizeProperties) {
-        // Fisher-Yates shuffle
         for (let i = middlePool.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [middlePool[i], middlePool[j]] = [middlePool[j], middlePool[i]];
         }
     }
-    // Place them into the 32 non-corner spaces
     let poolIndex = 0;
     for (let i = 0; i < 36; i++) {
         if (i === 0 || i === 9 || i === 18 || i === 27)
@@ -645,4 +665,3 @@ export function createBoardSpaces(randomizeProperties = false) {
     }
     return board;
 }
-export const properties = coloredProperties;
