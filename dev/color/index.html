@@ -63,6 +63,11 @@
 
         <!-- Center Column: Expanded Big Board & Hub -->
         <section class="board-container">
+            <!-- Sleek Compact Player Component for Small / Mobile Screens -->
+            <div class="mobile-player-strip" id="mobilePlayerStrip">
+                <!-- Dynamically populated mini player chips -->
+            </div>
+
             <div class="board-wrapper">
                 <div class="board" id="gameBoard">
 
@@ -126,12 +131,15 @@
     <!-- Player Setup / Input Modal -->
     <div class="modal-overlay" id="setupModal">
         <div class="setup-modal-card">
-            <div class="setup-header">
-                <div style="font-size: 1.8rem;">⚙️</div>
-                <div>
-                    <h2 style="font-size: 1.3rem; font-weight: 800;">Player Setup</h2>
-                    <p style="font-size: 0.8rem; color: #94a3b8;">Enter player names, choose tokens and customize colors</p>
+            <div class="setup-header-row" style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.8rem; margin-bottom: 1rem;">
+                <div class="setup-header" style="padding: 0; margin: 0; border: none;">
+                    <div style="font-size: 1.8rem;">⚙️</div>
+                    <div>
+                        <h2 style="font-size: 1.3rem; font-weight: 800;">Player Setup</h2>
+                        <p style="font-size: 0.8rem; color: #94a3b8;">Enter player names, choose tokens and customize colors</p>
+                    </div>
                 </div>
+                <button class="modal-close-btn" id="setupModalCloseBtn" title="Close Setup">&times;</button>
             </div>
 
             <div class="setup-player-count-row">
@@ -147,8 +155,11 @@
                 <!-- Dynamically generated player input rows -->
             </div>
 
-            <div class="setup-footer">
-                <button type="button" class="btn-game-action btn-buy" id="btnSaveSetup" style="width: 100%; justify-content: center;">
+            <div class="setup-footer" style="display: flex; gap: 0.75rem;">
+                <button type="button" class="btn-game-action btn-end" id="btnCancelSetup" style="flex: 1; justify-content: center;">
+                    Cancel
+                </button>
+                <button type="button" class="btn-game-action btn-buy" id="btnSaveSetup" style="flex: 2; justify-content: center;">
                     🚀 Start Match
                 </button>
             </div>
@@ -169,6 +180,7 @@
             <div class="modal-body">
                 <!-- Live Preview Card with Real Photo Image Background -->
                 <div class="preview-card-showcase" id="modalPreviewCard">
+                    <div class="preview-color-bar" id="modalPreviewColorBar"></div>
                     <div class="preview-top-badge-row">
                         <div class="preview-upgrade-badge" id="modalUpgradeBadge">LEVEL 0 (BASE LAND)</div>
                         <div id="modalGroupBonusBadge" style="font-size: 11px; font-weight: 800; color: #f59e0b;"></div>
@@ -248,9 +260,10 @@
 
     <!-- Chance / Community Task Modal -->
     <div class="modal-overlay" id="taskModal">
-        <div class="task-modal-card">
-            <div class="task-img-wrap" id="taskModalImgWrap" style="width: 100%; height: 120px; border-radius: 12px; overflow: hidden; margin-bottom: 0.5rem;">
-                <img id="taskModalImg" src="./assets/chance.jpg" alt="Card" style="width: 100%; height: 100%; object-fit: cover;">
+        <div class="task-modal-card" style="position: relative;">
+            <button class="modal-close-btn" id="taskModalCloseBtn" style="position: absolute; top: 12px; right: 12px; z-index: 10;" title="Close">&times;</button>
+            <div class="task-img-wrap" id="taskModalImgWrap">
+                <img id="taskModalImg" src="./assets/chance.jpg" alt="Card">
             </div>
             <h3 class="task-modal-title" id="taskModalTitle">Lucky Investment Return</h3>
             <p class="task-modal-desc" id="taskModalDesc">Your tech startup stock surged in the market! Collect ₹1,500 from the bank.</p>
@@ -258,6 +271,28 @@
             <button class="btn-game-action btn-roll" id="taskModalDismissBtn" style="width: 100%; justify-content: center;">
                 Continue
             </button>
+        </div>
+    </div>
+
+    <!-- Game Over / Victory Celebration Modal (Rules 32 & 33) -->
+    <div class="modal-overlay" id="gameOverModal">
+        <div class="game-over-modal-card">
+            <div class="winner-trophy-anim">🏆</div>
+            <h2 class="winner-title" id="winnerTitle">Match Champion!</h2>
+            <p class="winner-subtitle" id="winnerSubtitle">Player has triumphed and established a financial empire!</p>
+            
+            <div class="leaderboard-section">
+                <div class="leaderboard-header">Final Wealth Standings (Rule 33)</div>
+                <div class="leaderboard-container" id="leaderboardList">
+                    <!-- Standings generated dynamically -->
+                </div>
+            </div>
+
+            <div class="modal-footer" style="margin-top: 1.25rem; width: 100%;">
+                <button type="button" class="btn-game-action btn-buy" id="btnPlayAgain" style="width: 100%; justify-content: center; font-size: 1rem; padding: 0.75rem;">
+                    🔄 Play New Match
+                </button>
+            </div>
         </div>
     </div>
 

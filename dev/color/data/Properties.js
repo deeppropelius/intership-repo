@@ -455,7 +455,7 @@ export const cornerSpaces = {
         type: "corner",
         group: "special",
         name: "START",
-        image: "./assets/darjeeling.jpg",
+        image: "./assets/Darjeeling.jpg",
         subtitle: "Collect ₹2,000",
         description: "Collect ₹2,000 salary whenever you land on or pass Start!"
     },
@@ -464,8 +464,8 @@ export const cornerSpaces = {
         type: "corner",
         group: "special",
         name: "RESTHOUSE",
-        image: "./assets/goa.jpg",
-        subtitle: "Free Resort & Rest",
+        image: "./assets/Goa.jpg",
+        subtitle: "Free Rest",
         description: "Relax at the luxury resthouse. No rent, peaceful stop."
     },
     club: {
@@ -473,7 +473,7 @@ export const cornerSpaces = {
         type: "corner",
         group: "special",
         name: "CLUB",
-        image: "./assets/mumbai.jpg",
+        image: "./assets/Mumbai.jpg",
         subtitle: "VIP Networking",
         description: "Welcome to the exclusive Business Club. Enjoy high-stakes interactions!"
     },
@@ -482,7 +482,7 @@ export const cornerSpaces = {
         type: "corner",
         group: "special",
         name: "JAIL",
-        image: "./assets/delhi.jpg",
+        image: "./assets/Delhi.jpg",
         subtitle: "Just Visiting",
         description: "Don't break the trade laws! If sent here, pay fine or wait turns."
     }

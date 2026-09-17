@@ -31,6 +31,7 @@ const btnRestartGameEl = document.getElementById("btnRestartGame");
 const btnOpenSetupEl = document.getElementById("btnOpenSetup");
 const die1El = document.getElementById("die1");
 const die2El = document.getElementById("die2");
+const mobilePlayerStripEl = document.getElementById("mobilePlayerStrip");
 // Player Setup Modal Elements
 const setupModalEl = document.getElementById("setupModal");
 const playerCountButtonsEl = document.getElementById("playerCountButtons");
@@ -45,6 +46,7 @@ const modalHeaderBannerEl = document.getElementById("modalHeaderBanner");
 const modalPropNameEl = document.getElementById("modalPropName");
 const modalPropGroupEl = document.getElementById("modalPropGroup");
 const modalPreviewCardEl = document.getElementById("modalPreviewCard");
+const modalPreviewColorBarEl = document.getElementById("modalPreviewColorBar");
 const modalUpgradeBadgeEl = document.getElementById("modalUpgradeBadge");
 const modalGroupBonusBadgeEl = document.getElementById("modalGroupBonusBadge");
 const modalPreviewNameEl = document.getElementById("modalPreviewName");
@@ -65,11 +67,22 @@ const modalUpgradeActionBtnEl = document.getElementById("modalUpgradeActionBtn")
 const modalSellActionBtnEl = document.getElementById("modalSellActionBtn");
 // Task Modal Elements
 const taskModalEl = document.getElementById("taskModal");
+const taskModalCloseBtnEl = document.getElementById("taskModalCloseBtn");
 const taskModalImgEl = document.getElementById("taskModalImg");
 const taskModalTitleEl = document.getElementById("taskModalTitle");
 const taskModalDescEl = document.getElementById("taskModalDesc");
 const taskModalValueEl = document.getElementById("taskModalValue");
 const taskModalDismissBtnEl = document.getElementById("taskModalDismissBtn");
+// Setup Modal Additional Close & Cancel Elements
+const setupModalCloseBtnEl = document.getElementById("setupModalCloseBtn");
+const btnCancelSetupEl = document.getElementById("btnCancelSetup");
+// Game Over / Victory Modal Elements
+const gameOverModalEl = document.getElementById("gameOverModal");
+const winnerTitleEl = document.getElementById("winnerTitle");
+const winnerSubtitleEl = document.getElementById("winnerSubtitle");
+const leaderboardListEl = document.getElementById("leaderboardList");
+const btnPlayAgainEl = document.getElementById("btnPlayAgain");
+let currentDice = [3, 4];
 // Shuffle Helper
 function shuffle(array) {
     const arr = [...array];
@@ -106,11 +119,22 @@ function ownsFullGroup(playerId, group) {
     const groupProperties = boardSpaces.filter(s => s.group === group);
     return groupProperties.length === 5 && groupProperties.every(s => s.ownerId === playerId);
 }
-// Calculate Current Rent with Group Bonus (2x Rent if full color group is owned)
+// Calculate Current Rent with Group Bonus and Scaled Transport/White Rents
 function getCurrentRent(space) {
     if (!space.rent)
         return 0;
     let base = space.rent.base;
+    // Transport (White) Property scaling based on total white properties owned by this owner
+    if (space.type === "white" && space.ownerId) {
+        const whiteOwned = boardSpaces.filter(s => s.type === "white" && s.ownerId === space.ownerId).length;
+        if (whiteOwned === 2)
+            return base * 2;
+        if (whiteOwned === 3)
+            return base * 4;
+        if (whiteOwned >= 4)
+            return base * 8;
+        return base;
+    }
     if (space.hasHotel)
         base = space.rent.hotel;
     else if (space.houses === 3)
@@ -228,6 +252,8 @@ function updateTokensDisplay() {
     }
     const occupantsBySpace = {};
     players.forEach((player) => {
+        if (player.isBankrupt)
+            return; // Skip eliminated bankrupt players from tile tokens
         if (!occupantsBySpace[player.position]) {
             occupantsBySpace[player.position] = [];
         }
@@ -240,7 +266,7 @@ function updateTokensDisplay() {
         const countSlot = document.getElementById(`user-count-${spaceIdx}`);
         const spaceEl = document.getElementById(`space-${spaceIdx}`);
         // Prominent spotlight to the tile where active player is standing
-        if (activePlayer && activePlayer.position === spaceIdx && spaceEl) {
+        if (activePlayer && !activePlayer.isBankrupt && activePlayer.position === spaceIdx && spaceEl) {
             spaceEl.classList.add("has-active-player");
         }
         if (occupants.length > 0) {
@@ -263,37 +289,65 @@ function updateTokensDisplay() {
         }
     });
 }
-// Render Players List in Left Panel with Current Location Info
+// Render Players List in Left Panel & Compact Mini User Bar for Small Screens
 function renderPlayers() {
     playerListEl.innerHTML = "";
+    if (mobilePlayerStripEl)
+        mobilePlayerStripEl.innerHTML = "";
     players.forEach((player, idx) => {
-        const isCurrent = idx === currentPlayerIndex;
+        const isCurrent = idx === currentPlayerIndex && !player.isBankrupt;
         const currentSpace = boardSpaces[player.position];
-        const card = document.createElement("div");
-        card.className = `player-card ${isCurrent ? "active-turn" : ""}`;
-        card.style.setProperty("--player-color", player.color);
         const badgesHtml = player.properties.map(pId => {
             const prop = boardSpaces.find(s => s.id === pId);
             const color = prop ? (prop.group === "red" ? "#ef4444" : prop.group === "yellow" ? "#f59e0b" : prop.group === "blue" ? "#3b82f6" : prop.group === "green" ? "#10b981" : "#94a3b8") : "#94a3b8";
             const levelText = prop?.hasHotel ? "🏨" : (prop?.houses ? `🏠${prop.houses}` : "📍");
             return `<div class="prop-badge" style="background: ${color};" title="${prop?.name || ''}">${levelText}</div>`;
         }).join("");
+        const moneyDisplay = player.isBankrupt ? `<span style="color: #ef4444; font-weight: 800; font-size: 0.82rem;">BANKRUPT</span>` : `₹${player.money.toLocaleString()}`;
+        const locationDisplay = player.isBankrupt ? `<span style="color: #ef4444;">💀 Eliminated</span>` : `📍 ${currentSpace ? currentSpace.name : 'START'}`;
+        // 1. Sidebar Card (Desktop) with Board Tile Photo Background
+        const card = document.createElement("div");
+        card.className = `player-card ${isCurrent ? "active-turn" : ""} ${player.isBankrupt ? "bankrupt-card" : ""}`;
+        card.style.setProperty("--player-color", player.color);
+        const imageSrc = currentSpace?.image || "./assets/Darjeeling.jpg";
+        card.style.backgroundImage = `url('${imageSrc}')`;
         card.innerHTML = `
             <div class="player-card-header">
                 <div class="player-identity">
                     <div class="player-avatar" style="background: ${player.color}">${player.tokenEmoji}</div>
                     <div>
                         <div class="player-name">${player.name}</div>
-                        <div class="player-location-info">📍 ${currentSpace ? currentSpace.name : 'START'}</div>
+                        <div class="player-location-info">${locationDisplay}</div>
                     </div>
                 </div>
-                <div class="player-money">₹${player.money.toLocaleString()}</div>
+                <div class="player-money">${moneyDisplay}</div>
             </div>
             <div class="player-badges">
                 ${badgesHtml || '<span style="font-size: 11px; color: #64748b;">No properties yet</span>'}
             </div>
         `;
         playerListEl.appendChild(card);
+        // 2. Sleek Mini Player Chip (Small Screens)
+        if (mobilePlayerStripEl) {
+            const chip = document.createElement("div");
+            chip.className = `mini-player-chip ${isCurrent ? "active-turn" : ""} ${player.isBankrupt ? "bankrupt" : ""}`;
+            chip.style.setProperty("--player-color", player.color);
+            chip.title = `${player.name} • ${locationDisplay} • ${player.properties.length} Properties`;
+            const miniMoneyStr = player.isBankrupt ? "OUT" : `₹${player.money >= 1000 ? (player.money / 1000).toFixed(player.money % 1000 === 0 ? 0 : 1) + 'k' : player.money}`;
+            chip.innerHTML = `
+                <div class="mini-avatar" style="background: ${player.color}">${player.tokenEmoji}</div>
+                <div class="mini-info">
+                    <span class="mini-name">${player.name}</span>
+                    <span class="mini-money" style="color: ${player.isBankrupt ? '#ef4444' : '#34d399'}">${miniMoneyStr}</span>
+                </div>
+                ${isCurrent ? '<span class="mini-turn-tag">TURN</span>' : ''}
+            `;
+            chip.addEventListener("click", () => {
+                const propCount = player.properties.length;
+                addLog(`👤 <strong>${player.name}</strong> (${player.tokenEmoji}): ₹${player.money.toLocaleString()} | ${propCount} properties owned | Tile: ${currentSpace ? currentSpace.name : 'START'}`, "buy");
+            });
+            mobilePlayerStripEl.appendChild(chip);
+        }
     });
     const activePlayer = players[currentPlayerIndex];
     if (activePlayer) {
@@ -361,9 +415,11 @@ function openPropertyPreviewModal(space) {
     const groupColor = groupColors[space.group || "white"] || "#334155";
     modalHeaderBannerEl.style.background = groupColor;
     modalPropGroupEl.textContent = `${(space.group || "Transport").toUpperCase()} GROUP`;
-    // Live Showcase Preview Card with Real Photo Image
+    // Live Showcase Preview Card with Real Photo Image Matching Board
     const imageSrc = space.image || "./assets/Darjeeling.jpg";
     modalPreviewCardEl.style.backgroundImage = `url('${imageSrc}')`;
+    if (modalPreviewColorBarEl)
+        modalPreviewColorBarEl.style.background = groupColor;
     modalPreviewNameEl.textContent = space.name;
     const curRent = getCurrentRent(space);
     const hasGroup = ownsFullGroup(space.ownerId, space.group);
@@ -389,8 +445,8 @@ function openPropertyPreviewModal(space) {
     modalRent3El.textContent = space.rent ? `₹${space.rent.house3.toLocaleString()}` : "N/A";
     modalRentHotelEl.textContent = space.rent ? `₹${space.rent.hotel.toLocaleString()}` : "N/A";
     modalHouseCostEl.textContent = space.houseUpgrade ? `₹${space.houseUpgrade.toLocaleString()} / house` : "N/A";
-    const sellPrice = space.sellingPrice || Math.floor((space.buyingPrice || 1000) * 0.75);
-    modalSellValueEl.textContent = `₹${sellPrice.toLocaleString()} (75% Refund)`;
+    const sellRefund = calculatePropertyRefund(space);
+    modalSellValueEl.textContent = `₹${sellRefund.toLocaleString()} (75% Land & Buildings)`;
     const owner = players.find(p => p.id === space.ownerId);
     modalOwnerValEl.textContent = owner ? owner.name : "Unowned";
     modalOwnerValEl.style.color = owner ? owner.color : "#10b981";
@@ -450,7 +506,7 @@ function openPropertyPreviewModal(space) {
             }
             // 3. Sell / Mortgage Action
             modalSellActionBtnEl.style.display = "flex";
-            modalSellActionBtnEl.innerHTML = `<span>🏷️</span> Sell Property (Refund +₹${sellPrice.toLocaleString()})`;
+            modalSellActionBtnEl.innerHTML = `<span>🏷️</span> Sell Property (Refund +₹${sellRefund.toLocaleString()})`;
             modalSellActionBtnEl.onclick = () => {
                 sellProperty(space);
                 openPropertyPreviewModal(space);
@@ -461,6 +517,18 @@ function openPropertyPreviewModal(space) {
 }
 modalCloseBtnEl.addEventListener("click", () => propertyModalEl.classList.remove("open"));
 modalDismissBtnEl.addEventListener("click", () => propertyModalEl.classList.remove("open"));
+// Calculate Equity Refund for a property (75% Land + 75% Buildings)
+function calculatePropertyRefund(space) {
+    let buildingEquity = 0;
+    if (space.hasHotel) {
+        buildingEquity = ((space.houseUpgrade || 500) * 3 + (space.hotelUpgrade || 1000));
+    }
+    else if (space.houses) {
+        buildingEquity = (space.houseUpgrade || 500) * space.houses;
+    }
+    const landEquity = space.buyingPrice || 1000;
+    return Math.floor((landEquity + buildingEquity) * 0.75);
+}
 // Buy Property Handler
 function buyProperty(space) {
     const player = players[currentPlayerIndex];
@@ -523,13 +591,13 @@ function sellProperty(space) {
     const player = players[currentPlayerIndex];
     if (!space || space.ownerId !== player.id)
         return;
-    const refund = space.sellingPrice || Math.floor((space.buyingPrice || 1000) * 0.75);
+    const refund = calculatePropertyRefund(space);
     player.money += refund;
     player.properties = player.properties.filter(id => id !== space.id);
     space.ownerId = null;
     space.houses = 0;
     space.hasHotel = false;
-    addLog(`🏷️ <strong>${player.name}</strong> sold <strong>${space.name}</strong> and received <strong>+₹${refund.toLocaleString()}</strong> refund.`, "money-gain");
+    addLog(`🏷️ <strong>${player.name}</strong> sold <strong>${space.name}</strong> and received <strong>+₹${refund.toLocaleString()}</strong> refund (75% equity).`, "money-gain");
     centerStatusMsgEl.textContent = `Sold ${space.name}!`;
     renderBoard();
     renderPlayers();
@@ -555,6 +623,7 @@ async function handleRollDice() {
     const d1 = Math.floor(Math.random() * 6) + 1;
     const d2 = Math.floor(Math.random() * 6) + 1;
     const totalRoll = d1 + d2;
+    currentDice = [d1, d2];
     renderDiePips(die1El, d1);
     renderDiePips(die2El, d2);
     die1El.classList.remove("rolling");
@@ -577,6 +646,126 @@ async function handleRollDice() {
     }
     const destinationSpace = boardSpaces[player.position];
     handleLandedSpace(destinationSpace);
+}
+// Debt & Bankruptcy Resolution System (Rules 30 & 31)
+function resolveDebtAndPay(debtor, creditor, amount, reason) {
+    if (debtor.money >= amount) {
+        debtor.money -= amount;
+        if (creditor)
+            creditor.money += amount;
+        return true;
+    }
+    // Cash is insufficient! Calculate total net worth
+    const debtorProperties = boardSpaces.filter(s => s.ownerId === debtor.id);
+    const totalLiquidationValue = debtorProperties.reduce((sum, p) => sum + calculatePropertyRefund(p), 0);
+    const totalNetWorth = debtor.money + totalLiquidationValue;
+    if (totalNetWorth < amount) {
+        // Bankruptcy!
+        addLog(`💥 <strong>${debtor.name}</strong> owes ₹${amount.toLocaleString()} ${reason} but only has net worth ₹${totalNetWorth.toLocaleString()}!`, "money-loss");
+        handleBankruptcy(debtor, creditor);
+        return false;
+    }
+    // Has enough net worth! Liquidate properties until debtor has enough cash
+    let needed = amount - debtor.money;
+    for (const prop of debtorProperties) {
+        if (needed <= 0)
+            break;
+        const refund = calculatePropertyRefund(prop);
+        debtor.money += refund;
+        needed -= refund;
+        debtor.properties = debtor.properties.filter(id => id !== prop.id);
+        prop.ownerId = null;
+        prop.houses = 0;
+        prop.hasHotel = false;
+        addLog(`🏷️ <strong>${debtor.name}</strong> liquidated <strong>${prop.name}</strong> (+₹${refund.toLocaleString()}) to pay debt.`, "money-gain");
+    }
+    debtor.money -= amount;
+    if (creditor)
+        creditor.money += amount;
+    renderBoard();
+    renderPlayers();
+    saveGameState();
+    return true;
+}
+function handleBankruptcy(bankruptPlayer, creditor) {
+    bankruptPlayer.isBankrupt = true;
+    const remainingCash = Math.max(0, bankruptPlayer.money);
+    bankruptPlayer.money = 0;
+    const ownedSpaces = boardSpaces.filter(s => s.ownerId === bankruptPlayer.id);
+    if (creditor) {
+        creditor.money += remainingCash;
+        ownedSpaces.forEach(s => {
+            s.ownerId = creditor.id;
+            s.houses = 0;
+            s.hasHotel = false;
+            creditor.properties.push(s.id);
+        });
+        addLog(`💀 <strong>${bankruptPlayer.name}</strong> has declared <strong>BANKRUPTCY</strong>! Assets transferred to <strong>${creditor.name}</strong>!`, "money-loss");
+    }
+    else {
+        ownedSpaces.forEach(s => {
+            s.ownerId = null;
+            s.houses = 0;
+            s.hasHotel = false;
+        });
+        addLog(`💀 <strong>${bankruptPlayer.name}</strong> has declared <strong>BANKRUPTCY</strong>! Properties returned to bank.`, "money-loss");
+    }
+    bankruptPlayer.properties = [];
+    renderBoard();
+    renderPlayers();
+    saveGameState();
+    checkGameEnd();
+}
+function calculatePlayerTotalWealth(p) {
+    if (p.isBankrupt)
+        return 0;
+    const owned = boardSpaces.filter(s => s.ownerId === p.id);
+    const propValues = owned.reduce((sum, s) => {
+        let val = s.buyingPrice || 0;
+        if (s.hasHotel) {
+            val += (s.houseUpgrade || 500) * 3 + (s.hotelUpgrade || 1000);
+        }
+        else if (s.houses) {
+            val += (s.houseUpgrade || 500) * s.houses;
+        }
+        return sum + val;
+    }, 0);
+    return p.money + propValues;
+}
+function checkGameEnd() {
+    const activePlayers = players.filter(p => !p.isBankrupt);
+    if (activePlayers.length <= 1 && players.length > 1 && isMatchStarted) {
+        const winner = activePlayers[0] || players[0];
+        showGameOver(winner);
+    }
+}
+function showGameOver(winner) {
+    winnerTitleEl.textContent = `🏆 ${winner.name} Wins!`;
+    winnerSubtitleEl.textContent = `All competitors eliminated. ${winner.name} is the Supreme Business Tycoon!`;
+    const standings = [...players].sort((a, b) => {
+        if (a.isBankrupt && !b.isBankrupt)
+            return 1;
+        if (!a.isBankrupt && b.isBankrupt)
+            return -1;
+        return calculatePlayerTotalWealth(b) - calculatePlayerTotalWealth(a);
+    });
+    leaderboardListEl.innerHTML = standings.map((p, idx) => {
+        const wealth = calculatePlayerTotalWealth(p);
+        const rank = idx + 1;
+        const bankruptTag = p.isBankrupt ? `<span class="leaderboard-status-bankrupt">BANKRUPT</span>` : "";
+        return `
+            <div class="leaderboard-row ${rank === 1 ? 'rank-1' : ''}">
+                <div class="leaderboard-player-info">
+                    <div class="leaderboard-rank-tag">${rank === 1 ? '👑' : rank}</div>
+                    <div style="font-weight: 800; color: ${p.color};">${p.tokenEmoji} ${p.name}</div>
+                    ${bankruptTag}
+                </div>
+                <div class="leaderboard-wealth">₹${wealth.toLocaleString()}</div>
+            </div>
+        `;
+    }).join("");
+    gameOverModalEl.classList.add("open");
+    addLog(`🎉 <strong>MATCH OVER!</strong> <strong>${winner.name}</strong> is the Winner!`, "buy");
 }
 // Handle Landed Space Rules (Preview card automatically if unowned or owned for upgrade!)
 function handleLandedSpace(space) {
@@ -637,10 +826,11 @@ function handleLandedSpace(space) {
         else {
             const owner = players.find(p => p.id === space.ownerId);
             const rentAmount = getCurrentRent(space);
-            player.money -= rentAmount;
-            owner.money += rentAmount;
-            addLog(`💸 <strong>${player.name}</strong> paid <strong>₹${rentAmount.toLocaleString()}</strong> rent to <strong>${owner.name}</strong> for ${space.name}.`, "money-loss");
-            centerStatusMsgEl.textContent = `Paid ₹${rentAmount.toLocaleString()} rent to ${owner.name}.`;
+            const paid = resolveDebtAndPay(player, owner, rentAmount, `rent to ${owner.name} for ${space.name}`);
+            if (paid) {
+                addLog(`💸 <strong>${player.name}</strong> paid <strong>₹${rentAmount.toLocaleString()}</strong> rent to <strong>${owner.name}</strong> for ${space.name}.`, "money-loss");
+                centerStatusMsgEl.textContent = `Paid ₹${rentAmount.toLocaleString()} rent to ${owner.name}.`;
+            }
             renderPlayers();
             enableTurnEnd();
         }
@@ -666,8 +856,16 @@ function drawTaskCard(type) {
         const isPos = card.value >= 0;
         taskModalValueEl.textContent = `${isPos ? "+" : "-"} ₹${Math.abs(card.value).toLocaleString()}`;
         taskModalValueEl.className = `task-modal-value ${isPos ? "positive" : "negative"}`;
-        player.money += card.value;
-        addLog(`🃏 <strong>${player.name}</strong> drew ${isChance ? "Chance" : "Community"}: "${card.title}" (${isPos ? "+" : "-"}₹${Math.abs(card.value)}).`, "card");
+        if (isPos) {
+            player.money += card.value;
+            addLog(`🃏 <strong>${player.name}</strong> drew ${isChance ? "Chance" : "Community"}: "${card.title}" (+₹${card.value}).`, "card");
+        }
+        else {
+            const paid = resolveDebtAndPay(player, null, Math.abs(card.value), `for "${card.title}"`);
+            if (paid) {
+                addLog(`🃏 <strong>${player.name}</strong> drew ${isChance ? "Chance" : "Community"}: "${card.title}" (-₹${Math.abs(card.value)}).`, "card");
+            }
+        }
     }
     else if (card.actionType === "move") {
         taskModalValueEl.textContent = "ADVANCE TO START";
@@ -691,17 +889,25 @@ function enableTurnEnd() {
     btnEndTurnEl.style.display = "inline-flex";
     saveGameState();
 }
-// End Turn Handler
+// End Turn Handler (skips eliminated bankrupt players)
 function handleEndTurn() {
     btnBuyPropertyEl.style.display = "none";
     btnEndTurnEl.style.display = "none";
     btnRollDiceEl.disabled = false;
-    currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
+    // Advance to next active (non-bankrupt) player
+    let nextIdx = (currentPlayerIndex + 1) % players.length;
+    let checked = 0;
+    while (players[nextIdx].isBankrupt && checked < players.length) {
+        nextIdx = (nextIdx + 1) % players.length;
+        checked++;
+    }
+    currentPlayerIndex = nextIdx;
     renderPlayers();
     updateTokensDisplay();
     const nextPlayer = players[currentPlayerIndex];
     centerStatusMsgEl.textContent = `${nextPlayer.name}'s turn. Click "Roll Dice" to proceed.`;
     saveGameState();
+    checkGameEnd();
 }
 // LocalStorage Persistence Key
 const STORAGE_KEY = "tycoon_bharat_save_state_v1";
@@ -715,7 +921,8 @@ function saveGameState() {
             setupCount,
             chanceDeck,
             communityDeck,
-            logHtml: logFeedEl.innerHTML
+            logHtml: logFeedEl.innerHTML,
+            dice: currentDice
         };
         localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     }
@@ -738,6 +945,9 @@ function loadGameState() {
         setupCount = state.setupCount || players.length;
         chanceDeck = state.chanceDeck || shuffle(chanceTasks);
         communityDeck = state.communityDeck || shuffle(communityTasks);
+        if (state.dice && Array.isArray(state.dice) && state.dice.length === 2) {
+            currentDice = [state.dice[0], state.dice[1]];
+        }
         if (state.logHtml) {
             logFeedEl.innerHTML = state.logHtml;
         }
@@ -801,7 +1011,8 @@ function saveSetupAndStart() {
             position: 0,
             inJail: false,
             jailTurns: 0,
-            properties: []
+            properties: [],
+            isBankrupt: false
         });
     }
     players = newPlayers;
@@ -859,6 +1070,54 @@ function initGame() {
     btnEndTurnEl.addEventListener("click", handleEndTurn);
     btnShuffleBoardEl.addEventListener("click", handleShuffleBoard);
     btnRestartGameEl.addEventListener("click", handleRestartGame);
+    // Setup Modal Close and Cancel
+    setupModalCloseBtnEl?.addEventListener("click", () => {
+        if (isMatchStarted || players.length > 0) {
+            setupModalEl.classList.remove("open");
+        }
+    });
+    btnCancelSetupEl?.addEventListener("click", () => {
+        if (isMatchStarted || players.length > 0) {
+            setupModalEl.classList.remove("open");
+        }
+    });
+    // Task Modal Close
+    taskModalCloseBtnEl?.addEventListener("click", () => {
+        taskModalEl.classList.remove("open");
+        enableTurnEnd();
+    });
+    // Game Over Play Again
+    btnPlayAgainEl?.addEventListener("click", () => {
+        gameOverModalEl.classList.remove("open");
+        handleRestartGame();
+    });
+    // Backdrop Click Dismissal on all modal overlays
+    document.querySelectorAll(".modal-overlay").forEach(overlay => {
+        overlay.addEventListener("click", (e) => {
+            if (e.target === overlay) {
+                if (overlay.id === "setupModal" && (!isMatchStarted && players.length === 0))
+                    return;
+                if (overlay.id === "taskModal")
+                    enableTurnEnd();
+                overlay.classList.remove("open");
+            }
+        });
+    });
+    // Global Escape Key to close modals
+    window.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+            if (setupModalEl.classList.contains("open") && (isMatchStarted || players.length > 0)) {
+                setupModalEl.classList.remove("open");
+            }
+            if (propertyModalEl.classList.contains("open")) {
+                propertyModalEl.classList.remove("open");
+            }
+            if (taskModalEl.classList.contains("open")) {
+                taskModalEl.classList.remove("open");
+                enableTurnEnd();
+            }
+        }
+    });
     const hasSaved = loadGameState();
     if (!hasSaved) {
         chanceDeck = shuffle(chanceTasks);
@@ -872,8 +1131,8 @@ function initGame() {
         openSetupModal();
     }
     else {
-        renderDiePips(die1El, 3);
-        renderDiePips(die2El, 4);
+        renderDiePips(die1El, currentDice[0]);
+        renderDiePips(die2El, currentDice[1]);
         const activePlayer = players[currentPlayerIndex];
         if (activePlayer) {
             centerStatusMsgEl.textContent = `${activePlayer.name}'s turn.`;
