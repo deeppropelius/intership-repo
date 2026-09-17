@@ -60,64 +60,83 @@ body {
     left: 15vw;
     right: 15vw;
     display: flex;
-    height: 150px;
+    height: 15vh;
 }
 .middle-left{
     position: absolute;
-display: flex;
-flex-direction: column;
-top: 15vh;
-bottom: 15vh;
+    display: flex;
+    flex-direction: column;
+    top: 15vh;
+    bottom: 15vh;
+    left: 0;
+    width: 15vw;
 }
 .middle-right{
     position: absolute;
-display: flex;
-flex-direction: column;
-top: 15vh;
-bottom: 15vh;
-right: 0;
+    display: flex;
+    flex-direction: column;
+    top: 15vh;
+    bottom: 15vh;
+    right: 0;
+    width: 15vw;
 }
 .middle-bottom{
     position: absolute;
-display: flex;
-flex-direction: row;
-left: 15vw;
-bottom: 0;
-right: 15vw;
+    display: flex;
+    flex-direction: row;
+    left: 15vw;
+    bottom: 0;
+    right: 15vw;
+    height: 15vh;
 }
 
 .minimt {
-    width: 10vw;
-    height: 15vh;
+    flex: 1;
+    height: 100%;
     border: 2px solid black;
     background: white;
-
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
 
 .miniml{
-        border: 2px solid black;
-    width: 15vw;
-    height: 10vh;
-    writing-mode: sideways-rl;
+    flex: 1;
+    width: 100%;
+    border: 2px solid black;
+    background: white;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    overflow: hidden;
 }
 
 .minimr{
-        border: 2px solid black;
-    width: 15vw;
-    height: 10vh;
-    writing-mode: sideways-lr;
-    
+    flex: 1;
+    width: 100%;
+    border: 2px solid black;
+    background: white;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    overflow: hidden;
 }
+
 .minimb{
-        border: 2px solid black;
-    width: 10vw;
-    height: 15vh
+    flex: 1;
+    height: 100%;
+    border: 2px solid black;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
+
 h6{
     color: blue;
     font-size: xx-small;
-
 }
+
 .property {
     width: 120px;
     height: 150px;
@@ -129,21 +148,54 @@ h6{
     box-sizing: border-box;
 }
 
-.property-image {
-
+.minimt img {
     width: 100%;
-    height:10vh ;
-
+    height: 60%;
+    object-fit: cover;
+    display: block;
+}
+.miniml img {
+    width: 8vh;
+    height: 10vw;
+    object-fit: cover;
+    transform: rotate(90deg);
+    flex-shrink: 0;
+    display: block;
+}
+.minimr img {
+    width: 8vh;
+    height: 10vw;
     object-fit: cover;
 
-    display: block;
+    transform: rotate(-90deg);
     flex-shrink: 0;
+    display: block;
 }
-
+.minimr h6 {
+    writing-mode: sideways-lr;
+}
+.miniml h6 {
+    writing-mode: sideways-rl;
+}
+.minimb img {
+    width: 100%;
+    height: 60%;
+    object-fit: cover;
+    display: block;
+}
 .heading {
-    margin: 5px;
+    margin: 0;
+    padding: 2px;
     text-align: center;
-
     overflow: hidden;
     text-overflow: ellipsis;
+    display: flex;
+
+    justify-content: center;
+    flex: 1;
+    font-size: clamp(8px, 1.2vw, 11px);
+    word-break: break-word;
+}
+.minimt h6{
+    align-items: end;
 }

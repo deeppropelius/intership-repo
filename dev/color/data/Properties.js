@@ -50,7 +50,7 @@ export const properties = [
     {
         id: 4,
         name: "Mysuru",
-        image: "./assets/rishikesh.jpg",
+        image: "./assets/Mysuru.jpg",
         buyingPrice: 1100,
         sellingPrice: 825,
         houseUpgrade: 550,
@@ -114,7 +114,7 @@ export const properties = [
     {
         id: 8,
         name: "Madurai",
-        image: "./assets/khajuraho.jpg",
+        image: "./assets/Madurai.jpg",
         buyingPrice: 2100,
         sellingPrice: 1575,
         houseUpgrade: 1050,
@@ -161,8 +161,8 @@ export const properties = [
     },
     {
         id: 11,
-        name: "Kaziranga",
-        image: "./assets/kaziranga.jpg",
+        name: "Srinagar",
+        image: "./assets/Srinagar.jpg",
         buyingPrice: 3000,
         sellingPrice: 2250,
         houseUpgrade: 1500,
@@ -305,7 +305,7 @@ export const properties = [
     },
     {
         id: 20,
-        name: "Kerala Backwaters",
+        name: "Kerala",
         image: "./assets/kerala.jpg",
         buyingPrice: 10000,
         sellingPrice: 7500,

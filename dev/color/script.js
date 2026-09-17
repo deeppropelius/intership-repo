@@ -12,7 +12,6 @@ properties.forEach((state) => {
     const im = document.createElement("img");
     im.src = state.image;
     im.alt = state.name;
-    im.className = "property-image";
     const na = document.createElement("h6");
     na.textContent = state.name;
     na.className = "heading";
