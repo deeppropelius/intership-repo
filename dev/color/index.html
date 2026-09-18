@@ -10,58 +10,76 @@
 
 <body>
 
-    <!-- Header Navigation -->
-    <header class="app-header">
-        <div class="brand">
-            <span class="brand-icon">🏛️</span>
-            <div>
-                <span class="brand-title">TYCOON BHARAT</span>
-                <span class="brand-badge">PRO</span>
-            </div>
-        </div>
-
-        <div class="header-status">
-            <div class="turn-pill">
-                <span class="turn-dot" id="headerTurnDot" style="color: #3b82f6; background-color: #3b82f6;"></span>
-                <span id="headerTurnText">Alex's Turn</span>
-            </div>
-        </div>
-
-        <div class="header-actions">
-            <button class="btn-icon-label" id="btnOpenSetup" title="Configure player names and tokens">
-                <span>⚙️</span> Setup Players
-            </button>
-            <button class="btn-icon-label" id="btnShuffleBoard" title="Randomize properties on the board">
-                <span>🔀</span> Shuffle Board
-            </button>
-            <button class="btn-icon-label btn-primary" id="btnRestartGame" title="Restart the game">
-                <span>🔄</span> Reset
-            </button>
-        </div>
-    </header>
-
-    <!-- Main Game App Layout -->
+    <!-- Main Full-Screen Game App Layout (No Top Header) -->
     <main class="app-layout">
 
-        <!-- Left Column: Player Panels & Mini Ticker -->
+        <!-- Left Column: Player Panels & Activity Ticker -->
         <aside class="side-panel left-sidebar">
+            <div class="sidebar-brand-row">
+                <div class="brand">
+                    <span class="brand-icon">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                    </span>
+                    <span class="brand-title">TYCOON BHARAT</span>
+                    <span class="brand-badge">PRO</span>
+                </div>
+            </div>
+
             <div class="panel-title">
-                <span>👥</span> Players & Assets
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                <span>Players & Assets</span>
             </div>
             <div class="player-list" id="playerList">
                 <!-- Dynamically populated players -->
             </div>
 
             <!-- Sleek Activity Ticker in Left Panel -->
-            <div class="panel-title" style="margin-top: 0.5rem;">
-                <span>📜</span> Recent Activity
+            <div class="panel-title" style="margin-top: 0.35rem;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                <span>Recent Activity</span>
             </div>
             <div class="log-feed" id="logFeed">
-                <div class="log-item">🎮 Welcome to Tycoon Bharat! Setup players or roll dice to begin.</div>
+                <div class="log-item">Welcome to Tycoon Bharat! Setup players or roll dice to begin.</div>
+            </div>
+
+            <!-- Dedicated Turn Action & Dice Control Dock in Sidebar -->
+            <div class="turn-control-dock" id="turnControlDock">
+                <div class="dock-turn-header">
+                    <span class="dock-turn-dot" id="dockTurnDot"></span>
+                    <span class="dock-turn-name" id="centerTurnIndicator">Alex's Turn</span>
+                </div>
+                
+                <!-- 3D Dice Display -->
+                <div class="dock-dice-row">
+                    <div class="dice-area">
+                        <div class="die" id="die1"></div>
+                        <div class="die" id="die2"></div>
+                    </div>
+                </div>
+
+                <!-- Action Controls -->
+                <div class="dock-actions-row">
+                    <button class="btn-game-action btn-roll" id="btnRollDice">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><path d="M16 8h.01"/><path d="M12 12h.01"/><path d="M8 16h.01"/><path d="M8 8h.01"/><path d="M16 16h.01"/></svg>
+                        <span>Roll Dice</span>
+                    </button>
+                    <button class="btn-game-action btn-buy" id="btnBuyProperty" style="display: none;">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg>
+                        <span>Buy Property</span>
+                    </button>
+                    <button class="btn-game-action btn-end" id="btnEndTurn" style="display: none;">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 19 22 12 13 5 13 19"/><polygon points="2 19 11 12 2 5 2 19"/></svg>
+                        <span>End Turn</span>
+                    </button>
+                </div>
+
+                <div class="dock-status-msg" id="centerStatusMsg">
+                    Click "Roll Dice" to start your move!
+                </div>
             </div>
         </aside>
 
-        <!-- Center Column: Expanded Big Board & Hub -->
+        <!-- Center Column: Expanded Full-Screen Big Board & Hub -->
         <section class="board-container">
             <!-- Sleek Compact Player Component for Small / Mobile Screens -->
             <div class="mobile-player-strip" id="mobilePlayerStrip">
@@ -71,53 +89,55 @@
             <div class="board-wrapper">
                 <div class="board" id="gameBoard">
 
-                    <!-- Center Area inside the 10x10 Board Grid -->
+                    <!-- Clean, Spacious Center Area inside the 10x10 Board Grid (No dice or bulky buttons) -->
                     <div class="board-center">
                         <div class="center-decor-bg">₹</div>
 
-                        <div class="center-deck-row">
-                            <div class="deck-mini-card chance-mini">
-                                <span>❓</span> Chance Deck
+                        <!-- Sleek Center Top Controls -->
+                        <div class="center-top-bar">
+                            <div class="center-brand-tag">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                                <span>TYCOON BHARAT</span>
                             </div>
-                            <div class="deck-mini-card comm-mini">
-                                <span>🎁</span> Community Chest
+                            <div class="center-header-actions">
+                                <button class="btn-icon-label" id="btnOpenSetup" title="Configure player names and tokens">
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                                    <span>Setup</span>
+                                </button>
+                                <button class="btn-icon-label" id="btnShuffleBoard" title="Randomize properties on the board">
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.6-8.6c.8-1.1 2-1.7 3.3-1.7H22"/><path d="m18 2 4 4-4 4"/><path d="M2 6h1.4c1.3 0 2.5.6 3.3 1.7l2 2.6"/><path d="m14 13.7 1.6 2.1c.8 1.1 2 1.7 3.3 1.7H22"/><path d="m18 14 4 4-4 4"/></svg>
+                                    <span>Shuffle</span>
+                                </button>
+                                <button class="btn-icon-label btn-primary" id="btnRestartGame" title="Restart the game">
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
+                                    <span>Reset</span>
+                                </button>
                             </div>
                         </div>
 
-                        <div class="center-hub">
-                            <h2 class="center-game-title">TYCOON BHARAT</h2>
-                            <div class="center-turn-indicator" id="centerTurnIndicator">Alex's Turn</div>
-
-                            <!-- Interactive 3D Dice Display -->
-                            <div class="dice-area">
-                                <div class="die" id="die1">
-                                    <!-- Dynamic pips -->
-                                </div>
-                                <div class="die" id="die2">
-                                    <!-- Dynamic pips -->
-                                </div>
+                        <!-- Card Decks & Centerpiece -->
+                        <div class="center-deck-row">
+                            <div class="deck-mini-card chance-mini">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                                <span>Chance</span>
                             </div>
-
-                            <!-- Action Controls -->
-                            <div class="center-action-btn-row">
-                                <button class="btn-game-action btn-roll" id="btnRollDice">
-                                    <span>🎲</span> Roll Dice
-                                </button>
-                                <button class="btn-game-action btn-buy" id="btnBuyProperty" style="display: none;">
-                                    <span>💰</span> Buy Property
-                                </button>
-                                <button class="btn-game-action btn-end" id="btnEndTurn" style="display: none;">
-                                    <span>⏩</span> End Turn
-                                </button>
+                            <div class="deck-mini-card comm-mini">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12V8H4v4"/><path d="M2 12h20v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-8Z"/><path d="M12 12v3"/><path d="m19 8-3-4H8L5 8"/></svg>
+                                <span>Community</span>
                             </div>
+                        </div>
 
-                            <div class="center-status-msg" id="centerStatusMsg">
-                                Click "Roll Dice" to start your move!
+                        <!-- Majestic Center Emblem -->
+                        <div class="center-emblem-wrap">
+                            <div class="center-emblem-crown">
+                                <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m2 4 3 12h14l3-12-6 7-4-7-4 7-6-7zm3 16h14"/></svg>
                             </div>
+                            <div class="center-emblem-title">BHARAT MONOPOLY</div>
+                            <div class="center-emblem-sub">REAL ESTATE EMPIRE</div>
                         </div>
 
                         <div class="center-footer-info">
-                            Click any property to preview rent, upgrade houses, or mortgage/sell.
+                            Click any player card to view their owned properties gallery, or click a board tile to preview details.
                         </div>
                     </div>
 
@@ -128,12 +148,35 @@
 
     </main>
 
+    <!-- Player Owned Properties Accordion Modal (Expandable Cards Gallery Matching Reference Design) -->
+    <div class="modal-overlay" id="playerPortfolioModal">
+        <div class="portfolio-modal-card">
+            <div class="portfolio-modal-header">
+                <div class="portfolio-player-info">
+                    <div class="portfolio-avatar" id="portfolioAvatar"></div>
+                    <div>
+                        <h2 class="portfolio-title" id="portfolioTitle">Alex's Properties</h2>
+                        <p class="portfolio-subtitle" id="portfolioSubtitle">3 Assets Owned &bull; Net Worth ₹54,000</p>
+                    </div>
+                </div>
+                <button class="pm-close-btn" id="portfolioCloseBtn" aria-label="Close Portfolio">&times;</button>
+            </div>
+            
+            <!-- Expandable Horizontal Accordion Gallery -->
+            <div class="portfolio-accordion-container" id="portfolioAccordionContainer">
+                <!-- Dynamically rendered accordion cards -->
+            </div>
+        </div>
+    </div>
+
     <!-- Player Setup / Input Modal -->
     <div class="modal-overlay" id="setupModal">
         <div class="setup-modal-card">
             <div class="setup-header-row" style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.8rem; margin-bottom: 1rem;">
                 <div class="setup-header" style="padding: 0; margin: 0; border: none;">
-                    <div style="font-size: 1.8rem;">⚙️</div>
+                    <div style="color: #38bdf8;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                    </div>
                     <div>
                         <h2 style="font-size: 1.3rem; font-weight: 800;">Player Setup</h2>
                         <p style="font-size: 0.8rem; color: #94a3b8;">Enter player names, choose tokens and customize colors</p>
@@ -160,98 +203,117 @@
                     Cancel
                 </button>
                 <button type="button" class="btn-game-action btn-buy" id="btnSaveSetup" style="flex: 2; justify-content: center;">
-                    🚀 Start Match
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>
+                    <span>Start Match</span>
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- Property Details, Buy, Sell & Upgrade Preview Modal -->
+    <!-- Property Details, Buy, Sell & Upgrade Preview Modal (Full Background Image, Non-Scrollable Reference Card) -->
     <div class="modal-overlay" id="propertyModal">
-        <div class="property-modal-card">
-            <div class="modal-header-banner" id="modalHeaderBanner">
-                <div>
-                    <h3 class="modal-header-title" id="modalPropName">Mumbai</h3>
-                    <span class="modal-header-group" id="modalPropGroup">BLUE GROUP</span>
-                </div>
-                <button class="modal-close-btn" id="modalCloseBtn">&times;</button>
+        <div class="property-modal-card" id="modalPreviewCard">
+            <div class="pm-hero-colorbar" id="modalPreviewColorBar"></div>
+            
+            <!-- Top Row: Category Header + Close Button -->
+            <div class="pm-card-top">
+                <span class="pm-category-tag" id="modalPropGroup">BLUE REAL ESTATE GROUP</span>
+                <button class="pm-close-btn" id="modalCloseBtn" aria-label="Close modal">&times;</button>
             </div>
             
-            <div class="modal-body">
-                <!-- Live Preview Card with Real Photo Image Background -->
-                <div class="preview-card-showcase" id="modalPreviewCard">
-                    <div class="preview-color-bar" id="modalPreviewColorBar"></div>
-                    <div class="preview-top-badge-row">
-                        <div class="preview-upgrade-badge" id="modalUpgradeBadge">LEVEL 0 (BASE LAND)</div>
-                        <div id="modalGroupBonusBadge" style="font-size: 11px; font-weight: 800; color: #f59e0b;"></div>
+            <!-- Center Area: Bold Headline & Meta with Clock Icon -->
+            <div class="pm-card-main">
+                <h2 class="pm-hero-name" id="modalPropName">Mumbai Marine Drive</h2>
+                <div class="pm-hero-meta" id="modalHeroMeta">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    <span id="modalPreviewRent">Rent: ₹400 / turn &bull; Value: ₹4,000</span>
+                </div>
+            </div>
+
+            <!-- Transparent Frosted Glass Pricing Details Box (Restored to Clean Row Layout) -->
+            <div class="modal-pricing-grid" id="modalPricingGrid">
+                <div class="pricing-row" id="rowRentBase">
+                    <span class="pricing-label-flex">Base Rent</span>
+                    <span class="price-val" id="modalRentBase">₹400</span>
+                </div>
+                <div class="pricing-row" id="rowRent1">
+                    <span class="pricing-label-flex">With 1 House</span>
+                    <span class="price-val" id="modalRent1">₹800</span>
+                </div>
+                <div class="pricing-row" id="rowRent2">
+                    <span class="pricing-label-flex">With 2 Houses</span>
+                    <span class="price-val" id="modalRent2">₹1,200</span>
+                </div>
+                <div class="pricing-row" id="rowRent3">
+                    <span class="pricing-label-flex">With 3 Houses</span>
+                    <span class="price-val" id="modalRent3">₹1,600</span>
+                </div>
+                <div class="pricing-row" id="rowRentHotel">
+                    <span class="pricing-label-flex">With Hotel</span>
+                    <span class="price-val" id="modalRentHotel" style="color: #f59e0b;">₹2,400</span>
+                </div>
+                
+                <!-- Financial Specs in Transparent Meta Strip -->
+                <div class="pricing-meta-row">
+                    <div class="meta-item" id="rowBuyPrice">
+                        <span class="meta-label">Buy:</span>
+                        <span class="meta-val" id="modalBuyPrice" style="color: #4ade80;">₹4,000</span>
                     </div>
-                    <div class="preview-card-info">
-                        <div style="font-size: 1.25rem; font-weight: 900; text-shadow: 0 2px 5px rgba(0,0,0,0.9);" id="modalPreviewName">Mumbai</div>
-                        <div style="font-size: 0.9rem; color: #fef08a; font-weight: 800;" id="modalPreviewRent">Current Rent: ₹400 / turn</div>
+                    <div class="meta-item" id="rowHouseCost">
+                        <span class="meta-label">Upgrade:</span>
+                        <span class="meta-val" id="modalHouseCost" style="color: #60a5fa;">₹2,000</span>
+                    </div>
+                    <div class="meta-item" id="rowSellValue">
+                        <span class="meta-label">Sell:</span>
+                        <span class="meta-val" id="modalSellValue" style="color: #fbbf24;">₹3,000</span>
                     </div>
                 </div>
+                
+                <!-- Hidden element for JS compatibility -->
+                <span id="modalOwnerVal" style="display: none;"></span>
+            </div>
 
-                <p class="modal-desc" id="modalPropDesc">Property description.</p>
+            <!-- Description note (compact) -->
+            <p class="modal-desc" id="modalPropDesc" style="display: none;">Property description.</p>
 
-                <!-- Rent & Upgrade Tiers Breakdown -->
-                <div class="modal-pricing-grid">
-                    <div class="pricing-row highlight">
-                        <span>Buying Price:</span>
-                        <span class="price-val" id="modalBuyPrice" style="color: #34d399;">₹4,000</span>
-                    </div>
-                    <div class="pricing-row" id="rowRentBase">
-                        <span>Base Rent:</span>
-                        <span class="price-val" id="modalRentBase">₹400</span>
-                    </div>
-                    <div class="pricing-row" id="rowRent1">
-                        <span>🏠 1 House Rent:</span>
-                        <span class="price-val" id="modalRent1">₹800</span>
-                    </div>
-                    <div class="pricing-row" id="rowRent2">
-                        <span>🏠🏠 2 Houses Rent:</span>
-                        <span class="price-val" id="modalRent2">₹1,200</span>
-                    </div>
-                    <div class="pricing-row" id="rowRent3">
-                        <span>🏠🏠🏠 3 Houses Rent:</span>
-                        <span class="price-val" id="modalRent3">₹1,600</span>
-                    </div>
-                    <div class="pricing-row" id="rowRentHotel">
-                        <span>🏨 Hotel Rent:</span>
-                        <span class="price-val" id="modalRentHotel">₹2,400</span>
-                    </div>
-                    <div class="pricing-row" style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 4px;">
-                        <span>House Upgrade Cost:</span>
-                        <span class="price-val" id="modalHouseCost" style="color: #60a5fa;">₹2,000 / house</span>
-                    </div>
-                    <div class="pricing-row">
-                        <span>Mortgage / Sell Value:</span>
-                        <span class="price-val" id="modalSellValue" style="color: #f59e0b;">₹3,000</span>
-                    </div>
-                    <div class="pricing-row">
-                        <span>Owner:</span>
-                        <span class="price-val" id="modalOwnerVal">Unowned</span>
+            <!-- Landlord / Author Profile Row (Exact match to reference card) -->
+            <div class="pm-hero-author-row">
+                <div class="pm-author-avatar-wrap">
+                    <div class="pm-author-avatar" id="modalAuthorAvatar">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                     </div>
                 </div>
-
-                <!-- Interactive Buy / Upgrade / Sell Actions -->
-                <div class="preview-actions-container">
-                    <div class="view-only-banner" id="modalViewOnlyNotice" style="display: none;">
-                        👁️ <span>Viewing Only &bull; Land on this tile to Buy or Upgrade</span>
-                    </div>
-                    <button class="btn-game-action btn-buy" id="modalBuyActionBtn" style="display: none;">
-                        <span>💰</span> Buy Property
-                    </button>
-                    <button class="btn-game-action btn-primary" id="modalUpgradeActionBtn" style="display: none;">
-                        <span>🏠</span> Upgrade House (+₹Rent)
-                    </button>
-                    <button class="btn-game-action btn-end" id="modalSellActionBtn" style="display: none; background: #7f1d1d;">
-                        <span>🏷️</span> Sell / Mortgage
-                    </button>
+                <div class="pm-author-info">
+                    <div class="pm-author-name" id="modalAuthorName">Unowned Asset</div>
+                    <div class="pm-author-role" id="modalAuthorRole">Available for Purchase &bull; ₹4,000</div>
                 </div>
+                <div class="pm-level-badge" id="modalUpgradeBadge">BASE LAND</div>
+            </div>
 
-                <div class="modal-footer">
-                    <button class="btn-game-action btn-end" id="modalDismissBtn" style="width: 100%; justify-content: center;">
-                        Close / Skip
+            <!-- Group bonus tag if active -->
+            <div id="modalGroupBonusBadge" class="pm-bonus-tag" style="display: none;"></div>
+
+            <!-- Action Controls Row -->
+            <div class="pm-card-actions">
+                <div class="view-only-banner" id="modalViewOnlyNotice" style="display: none;">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                    <span>Land on space to Buy or Upgrade</span>
+                </div>
+                <div class="pm-action-row">
+                    <button class="btn-game-action btn-buy pm-action-btn" id="modalBuyActionBtn" style="display: none;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg>
+                        <span>Buy Property</span>
+                    </button>
+                    <button class="btn-game-action btn-primary pm-action-btn" id="modalUpgradeActionBtn" style="display: none;">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3 2 12h3v8h6v-5h2v5h6v-8h3z"/></svg>
+                        <span>Upgrade</span>
+                    </button>
+                    <button class="btn-game-action btn-end pm-action-btn pm-sell-btn" id="modalSellActionBtn" style="display: none;">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2H2v10l9.29 9.29c.94.94 2.48.94 3.42 0l6.58-6.58c.94-.94.94-2.48 0-3.42L12 2Z"/><circle cx="7" cy="7" r=".5"/></svg>
+                        <span>Sell</span>
+                    </button>
+                    <button class="btn-game-action btn-end pm-action-btn" id="modalDismissBtn" style="flex: 0 0 auto; padding: 0 12px; font-size: 0.75rem;">
+                        Close
                     </button>
                 </div>
             </div>
@@ -277,7 +339,9 @@
     <!-- Game Over / Victory Celebration Modal (Rules 32 & 33) -->
     <div class="modal-overlay" id="gameOverModal">
         <div class="game-over-modal-card">
-            <div class="winner-trophy-anim">🏆</div>
+            <div class="winner-trophy-anim">
+                <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.45 1-1 1H7v2h10v-2h-2c-.55 0-1-.45-1-1v-2.34"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+            </div>
             <h2 class="winner-title" id="winnerTitle">Match Champion!</h2>
             <p class="winner-subtitle" id="winnerSubtitle">Player has triumphed and established a financial empire!</p>
             
@@ -290,7 +354,8 @@
 
             <div class="modal-footer" style="margin-top: 1.25rem; width: 100%;">
                 <button type="button" class="btn-game-action btn-buy" id="btnPlayAgain" style="width: 100%; justify-content: center; font-size: 1rem; padding: 0.75rem;">
-                    🔄 Play New Match
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
+                    <span>Play New Match</span>
                 </button>
             </div>
         </div>
