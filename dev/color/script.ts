@@ -5,10 +5,10 @@ import { ICONS, getTokenSvg } from "./icons.js";
 // Game State
 let boardSpaces: BoardSpace[] = [];
 let players: Player[] = [
-    { id: 1, name: "Alex", money: gameConfig.startingMoney, color: "#3b82f6", tokenEmoji: "car", position: 0, inJail: false, jailTurns: 0, properties: [] },
-    { id: 2, name: "Priya", money: gameConfig.startingMoney, color: "#ef4444", tokenEmoji: "plane", position: 0, inJail: false, jailTurns: 0, properties: [] },
-    { id: 3, name: "Rohan", money: gameConfig.startingMoney, color: "#10b981", tokenEmoji: "ship", position: 0, inJail: false, jailTurns: 0, properties: [] },
-    { id: 4, name: "Sara", money: gameConfig.startingMoney, color: "#f59e0b", tokenEmoji: "train", position: 0, inJail: false, jailTurns: 0, properties: [] }
+    { id: 1, name: "Alex", money: gameConfig.startingMoney, color: "#3b82f6", tokenEmoji: "pin", position: 0, inJail: false, jailTurns: 0, properties: [] },
+    { id: 2, name: "Priya", money: gameConfig.startingMoney, color: "#ef4444", tokenEmoji: "pin", position: 0, inJail: false, jailTurns: 0, properties: [] },
+    { id: 3, name: "Rohan", money: gameConfig.startingMoney, color: "#10b981", tokenEmoji: "pin", position: 0, inJail: false, jailTurns: 0, properties: [] },
+    { id: 4, name: "Sara", money: gameConfig.startingMoney, color: "#f59e0b", tokenEmoji: "pin", position: 0, inJail: false, jailTurns: 0, properties: [] }
 ];
 
 let currentPlayerIndex = 0;
@@ -17,19 +17,8 @@ let isMatchStarted = false;
 let chanceDeck: TaskCard[] = [];
 let communityDeck: TaskCard[] = [];
 
-// Available Tokens & Colors
-const availableTokens = ["car", "plane", "ship", "train", "racecar", "rocket", "crown", "diamond"];
-const tokenLabels: Record<string, string> = {
-    car: "Car",
-    plane: "Airplane",
-    ship: "Cruise Ship",
-    train: "Express Train",
-    racecar: "Race Car",
-    rocket: "Space Rocket",
-    crown: "Royal Crown",
-    diamond: "Diamond"
-};
-const defaultColors = ["#3b82f6", "#ef4444", "#10b981", "#f59e0b", "#8b5cf6", "#06b6d4"];
+// Available Colors
+const defaultColors = ["#3b82f6", "#ef4444", "#10b981", "#f59e0b", "#a855f7", "#ec4899", "#06b6d4", "#f97316"];
 
 // DOM Elements
 const gameBoardEl = document.getElementById("gameBoard") as HTMLElement;
@@ -136,11 +125,11 @@ function getGridPosition(index: number): { row: number; col: number; edge: strin
     return { row: 1, col: 1, edge: "corner" };
 }
 
-// Check if player owns full color group (5 properties)
+// Check if player owns 3 or more properties in the same color group (red, blue, green, yellow)
 function ownsFullGroup(playerId: number | null | undefined, group?: string): boolean {
     if (!playerId || !group || group === "white" || group === "special") return false;
-    const groupProperties = boardSpaces.filter(s => s.group === group);
-    return groupProperties.length === 5 && groupProperties.every(s => s.ownerId === playerId);
+    const ownedCount = boardSpaces.filter(s => s.group === group && s.ownerId === playerId).length;
+    return ownedCount >= 3;
 }
 
 // Calculate Current Rent with Group Bonus and Scaled Transport/White Rents
@@ -587,9 +576,9 @@ function openPropertyPreviewModal(space: BoardSpace): void {
         yellow: "#f59e0b",
         blue: "#3b82f6",
         green: "#10b981",
-        white: "#475569"
+        white: "#ffffff"
     };
-    const groupColor = groupColors[space.group || "white"] || "#334155";
+    const groupColor = groupColors[space.group || "white"] || "#3b82f6";
     // Apply group colour to hero card border + colorbar
     const heroEl = document.getElementById("modalPreviewCard");
     if (heroEl) heroEl.style.borderColor = groupColor;
@@ -597,7 +586,7 @@ function openPropertyPreviewModal(space: BoardSpace): void {
     if (colorBarEl) colorBarEl.style.background = groupColor;
     const groupEl = document.getElementById("modalPropGroup");
     if (groupEl) {
-        groupEl.textContent = isWhite ? "TRANSPORT & LOGISTICS" : `${(space.group || "Property").toUpperCase()} REAL ESTATE`;
+        groupEl.textContent = `${(space.group || "Property").toUpperCase()} COLOR GROUP`;
         groupEl.style.color = groupColor;
     }
     
@@ -647,8 +636,9 @@ function openPropertyPreviewModal(space: BoardSpace): void {
         modalUpgradeBadgeEl.textContent = upgradeLevelText;
         modalUpgradeBadgeEl.style.background = space.hasHotel ? "#ef4444" : (space.houses ? "#10b981" : "#3b82f6");
 
-        modalGroupBonusBadgeEl.innerHTML = hasGroup ? `<span style="display: inline-flex; align-items: center; gap: 4px;">${ICONS.star} <span>FULL COLOR GROUP OWNED</span></span>` : "";
-        modalPreviewRentEl.textContent = `Rent: ₹${curRent.toLocaleString()} / turn • Value: ₹${(space.buyingPrice || 0).toLocaleString()} ${hasGroup && !space.houses ? '(2x Group Bonus)' : ''}`;
+        const colorOwnedCount = space.ownerId && space.group ? boardSpaces.filter(s => s.group === space.group && s.ownerId === space.ownerId).length : 0;
+        modalGroupBonusBadgeEl.innerHTML = hasGroup ? `<span style="display: inline-flex; align-items: center; gap: 4px;">${ICONS.star} <span>${colorOwnedCount}/3+ COLOR SET OWNED (2x RENT ACTIVE)</span></span>` : "";
+        modalPreviewRentEl.textContent = `Rent: ₹${curRent.toLocaleString()} / turn • Value: ₹${(space.buyingPrice || 0).toLocaleString()} ${hasGroup && !space.houses ? `(2x Set Bonus: ${colorOwnedCount} Owned)` : ''}`;
 
         // Restore Normal Property Pricing Rows
         const isBaseActive = !space.houses && !space.hasHotel;
@@ -823,8 +813,9 @@ function buyProperty(space: BoardSpace): void {
     addLog(`<strong>${player.name}</strong> bought <strong>${space.name}</strong> for <strong>₹${space.buyingPrice.toLocaleString()}</strong>!`, "buy");
     centerStatusMsgEl.textContent = `${player.name} bought ${space.name}!`;
 
-    if (ownsFullGroup(player.id, space.group)) {
-        addLog(`<strong>${player.name}</strong> completed the <strong>${(space.group || '').toUpperCase()} COLOR GROUP</strong>! Rent is now DOUBLED!`, "money-gain");
+    const colorCount = space.group ? boardSpaces.filter(s => s.group === space.group && s.ownerId === player.id).length : 0;
+    if (colorCount >= 3) {
+        addLog(`<strong>${player.name}</strong> owns ${colorCount} <strong>${(space.group || '').toUpperCase()}</strong> tickets! Rent is now DOUBLED (2x)!`, "money-gain");
     }
 
     btnBuyPropertyEl.style.display = "none";
@@ -1288,23 +1279,22 @@ function clearGameState(): void {
     }
 }
 
-// Setup Modal Player Inputs Generation
+// Setup Modal Player Inputs Generation (Clean Location Pin indicator + Name + Color)
 function renderSetupInputs(): void {
     setupPlayerInputsEl.innerHTML = "";
     for (let i = 0; i < setupCount; i++) {
         const existing = players[i];
         const defaultName = existing ? existing.name : `Player ${i + 1}`;
-        const defaultToken = existing ? existing.tokenEmoji : availableTokens[i % availableTokens.length];
         const defaultColor = existing ? existing.color : defaultColors[i % defaultColors.length];
 
         const row = document.createElement("div");
         row.className = "player-input-row";
         row.innerHTML = `
-            <div class="player-input-num">P${i + 1}</div>
+            <div class="player-input-num" style="display: flex; align-items: center; gap: 4px; color: ${defaultColor}; font-weight: 800;">
+                ${getTokenSvg("pin", 14)}
+                <span>P${i + 1}</span>
+            </div>
             <input type="text" class="input-text" id="setupName-${i}" value="${defaultName}" placeholder="Player ${i + 1} Name">
-            <select class="token-select" id="setupToken-${i}">
-                ${availableTokens.map(t => `<option value="${t}" ${t === defaultToken ? "selected" : ""}>${tokenLabels[t] || t}</option>`).join("")}
-            </select>
             <input type="color" class="color-picker" id="setupColor-${i}" value="${defaultColor}">
         `;
         setupPlayerInputsEl.appendChild(row);
@@ -1322,7 +1312,6 @@ function saveSetupAndStart(): void {
     const newPlayers: Player[] = [];
     for (let i = 0; i < setupCount; i++) {
         const nameInput = document.getElementById(`setupName-${i}`) as HTMLInputElement;
-        const tokenSelect = document.getElementById(`setupToken-${i}`) as HTMLSelectElement;
         const colorInput = document.getElementById(`setupColor-${i}`) as HTMLInputElement;
 
         newPlayers.push({
@@ -1330,7 +1319,7 @@ function saveSetupAndStart(): void {
             name: nameInput.value.trim() || `Player ${i + 1}`,
             money: gameConfig.startingMoney,
             color: colorInput.value || defaultColors[i % defaultColors.length],
-            tokenEmoji: tokenSelect.value || availableTokens[i % availableTokens.length],
+            tokenEmoji: "pin",
             position: 0,
             inJail: false,
             jailTurns: 0,

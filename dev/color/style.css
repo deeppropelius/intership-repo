@@ -589,7 +589,7 @@ body {
 .group-yellow { background: var(--group-yellow); }
 .group-blue { background: var(--group-blue); }
 .group-green { background: var(--group-green); }
-.group-white { background: #cbd5e1; }
+.group-white { background: #ffffff; box-shadow: 0 0 6px rgba(255, 255, 255, 0.5); }
 .group-chance { background: var(--group-chance); }
 .group-community { background: var(--group-community); }
 .group-special { background: #475569; }
@@ -1347,8 +1347,8 @@ body {
 
 .player-input-row {
     display: grid;
-    grid-template-columns: 36px 1fr 60px 42px;
-    gap: 0.5rem;
+    grid-template-columns: 50px 1fr 42px;
+    gap: 0.6rem;
     align-items: center;
     background: rgba(25, 34, 55, 0.6);
     padding: 0.5rem 0.75rem;

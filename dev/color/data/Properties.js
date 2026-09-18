@@ -463,8 +463,8 @@ export const cornerSpaces = {
         id: "corner-resthouse",
         type: "corner",
         group: "special",
-        name: "RESTHOUSE",
-        image: "./assets/Goa.jpg",
+        name: "REST HOUSE",
+        image: "./assets/resthouse.jpg",
         subtitle: "Free Rest",
         description: "Relax at the luxury resthouse. No rent, peaceful stop."
     },
@@ -473,7 +473,7 @@ export const cornerSpaces = {
         type: "corner",
         group: "special",
         name: "CLUB",
-        image: "./assets/Mumbai.jpg",
+        image: "./assets/club.jpg",
         subtitle: "VIP Networking",
         description: "Welcome to the exclusive Business Club. Enjoy high-stakes interactions!"
     },
@@ -482,7 +482,7 @@ export const cornerSpaces = {
         type: "corner",
         group: "special",
         name: "JAIL",
-        image: "./assets/Delhi.jpg",
+        image: "./assets/jail.jpg",
         subtitle: "Just Visiting",
         description: "Don't break the trade laws! If sent here, pay fine or wait turns."
     }
@@ -582,70 +582,44 @@ export const communityTasks = [
         image: "./assets/community.jpg"
     }
 ];
-// Helper to build the standard 36-space board
+// Helper to build the standard 36-space board with balanced color groups
 export function createBoardSpaces(randomizeProperties = false) {
     const board = new Array(36);
     board[0] = { ...cornerSpaces.start, spaceIndex: 0 };
     board[9] = { ...cornerSpaces.resthouse, spaceIndex: 9 };
     board[18] = { ...cornerSpaces.club, spaceIndex: 18 };
     board[27] = { ...cornerSpaces.jail, spaceIndex: 27 };
+    const redProps = coloredProperties.filter(p => p.group === "red");
+    const yellowProps = coloredProperties.filter(p => p.group === "yellow");
+    const blueProps = coloredProperties.filter(p => p.group === "blue");
+    const greenProps = coloredProperties.filter(p => p.group === "green");
+    const chanceCard = {
+        id: "chance",
+        type: "chance",
+        group: "special",
+        name: "CHANCE",
+        image: "./assets/chance.jpg",
+        subtitle: "Try Your Luck",
+        description: "Draw a lucky Chance card from the center deck!"
+    };
+    const communityCard = {
+        id: "community",
+        type: "community",
+        group: "special",
+        name: "COMMUNITY",
+        image: "./assets/community.jpg",
+        subtitle: "Chest & Perks",
+        description: "Draw a Community chest task card!"
+    };
     let middlePool = [
-        ...coloredProperties,
-        ...whiteProperties,
-        {
-            id: "chance-1",
-            type: "chance",
-            group: "special",
-            name: "CHANCE",
-            image: "./assets/chance.jpg",
-            subtitle: "Try Your Luck",
-            description: "Draw a lucky Chance card from the center deck!"
-        },
-        {
-            id: "chance-2",
-            type: "chance",
-            group: "special",
-            name: "CHANCE",
-            image: "./assets/chance.jpg",
-            subtitle: "Try Your Luck",
-            description: "Draw a lucky Chance card from the center deck!"
-        },
-        {
-            id: "chance-3",
-            type: "chance",
-            group: "special",
-            name: "CHANCE",
-            image: "./assets/chance.jpg",
-            subtitle: "Try Your Luck",
-            description: "Draw a lucky Chance card from the center deck!"
-        },
-        {
-            id: "community-1",
-            type: "community",
-            group: "special",
-            name: "COMMUNITY",
-            image: "./assets/community.jpg",
-            subtitle: "Chest & Perks",
-            description: "Draw a Community chest task card!"
-        },
-        {
-            id: "community-2",
-            type: "community",
-            group: "special",
-            name: "COMMUNITY",
-            image: "./assets/community.jpg",
-            subtitle: "Chest & Perks",
-            description: "Draw a Community chest task card!"
-        },
-        {
-            id: "community-3",
-            type: "community",
-            group: "special",
-            name: "COMMUNITY",
-            image: "./assets/community.jpg",
-            subtitle: "Chest & Perks",
-            description: "Draw a Community chest task card!"
-        }
+        // Side 1 (Left - spaces 1..8): Red Sector + Chance + Community + White Transport
+        redProps[0], redProps[1], redProps[2], { ...chanceCard, id: "chance-1" }, redProps[3], redProps[4], { ...communityCard, id: "community-1" }, whiteProperties[0],
+        // Side 2 (Top - spaces 10..17): Yellow Sector + Chance + White Transports
+        yellowProps[0], yellowProps[1], yellowProps[2], { ...chanceCard, id: "chance-2" }, yellowProps[3], yellowProps[4], whiteProperties[1], whiteProperties[2],
+        // Side 3 (Right - spaces 19..26): Blue Sector + Community + Chance + White Transport
+        blueProps[0], blueProps[1], blueProps[2], { ...communityCard, id: "community-2" }, blueProps[3], blueProps[4], { ...chanceCard, id: "chance-3" }, whiteProperties[3],
+        // Side 4 (Bottom - spaces 28..35): Green Sector + Community + White Transports
+        greenProps[0], greenProps[1], greenProps[2], { ...communityCard, id: "community-3" }, greenProps[3], greenProps[4], whiteProperties[4], whiteProperties[5]
     ];
     if (randomizeProperties) {
         for (let i = middlePool.length - 1; i > 0; i--) {
